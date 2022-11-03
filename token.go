@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-var tokenPath = "/token"
+const tokenPath = "/token"
 
 var ErrInvalidTokenRequest = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
 

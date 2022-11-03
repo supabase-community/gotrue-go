@@ -39,6 +39,11 @@ func randomString(n int) string {
 	return string(b)
 }
 
+// Utility function to generate a random email address.
+func randomEmail() string {
+	return fmt.Sprintf("%s@test.com", randomString(10))
+}
+
 func adminToken() string {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"aud":  "admin",

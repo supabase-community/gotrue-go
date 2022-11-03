@@ -10,6 +10,14 @@ import (
 
 const adminGenerateLinkPath = "/admin/generate_link"
 
+type ErrInvalidGenerateLinkRequest struct {
+	message string
+}
+
+func (e *ErrInvalidGenerateLinkRequest) Error() string {
+	return fmt.Sprintf("generate link request is invalid - %s", e.message)
+}
+
 type LinkType string
 
 const (
@@ -34,8 +42,49 @@ type AdminGenerateLinkResponse struct {
 	ActionLink       string   `json:"action_link"`
 	EmailOTP         string   `json:"email_otp"`
 	HashedToken      string   `json:"hashed_token"`
-	VerificationType LinkType `json:"verification_type"`
 	RedirectTo       string   `json:"redirect_to"`
+	VerificationType LinkType `json:"verification_type"`
+}
+
+func validateAdminGenerateLinkRequest(req AdminGenerateLinkRequest) error {
+	switch req.Type {
+	case LinkTypeSignup:
+		if req.Email == "" || req.Password == "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "email and password must be provided if Type is signup",
+			}
+		}
+	case LinkTypeMagicLink, LinkTypeInvite:
+		if req.Email == "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "email must be provided if Type is magiclink or invite",
+			}
+		}
+	case LinkTypeRecovery:
+		if req.Email == "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "email must be provided if Type is recovery",
+			}
+		}
+		if len(req.Data) > 0 {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "data must not be provided if Type is recovery",
+			}
+		}
+	case LinkTypeEmailChangeCurrent, LinkTypeEmailChangeNew:
+		if req.Email == "" || req.NewEmail == "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "email and new_email must be provided if Type is email_change_current or email_change_new",
+			}
+		}
+		if len(req.Data) > 0 {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "data must not be provided if Type is email_change_current or email_change_new",
+			}
+		}
+	}
+
+	return nil
 }
 
 // POST /admin/generate_link
@@ -45,6 +94,11 @@ type AdminGenerateLinkResponse struct {
 // link as separate JSON fields for convenience (along with the email OTP from
 // which the corresponding token is generated).
 func (c *Client) AdminGenerateLink(req AdminGenerateLinkRequest) (*AdminGenerateLinkResponse, error) {
+	err := validateAdminGenerateLinkRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err

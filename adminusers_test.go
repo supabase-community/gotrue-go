@@ -1,7 +1,6 @@
 package gotrue_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +16,7 @@ func TestAdminCreateUser(t *testing.T) {
 	c := client.WithToken(adminToken())
 
 	pass := "password"
-	email := fmt.Sprintf("%s@test.com", randomString(10))
+	email := randomEmail()
 	req := gotrue.AdminCreateUserRequest{
 		Email:    email,
 		Role:     "admin",
@@ -38,7 +37,7 @@ func TestAdminListUsers(t *testing.T) {
 
 	// Create a user that we know should be returned
 	pass := "password"
-	email := fmt.Sprintf("%s@test.com", randomString(10))
+	email := randomEmail()
 	req := gotrue.AdminCreateUserRequest{
 		Email:    email,
 		Role:     "test",
