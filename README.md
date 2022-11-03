@@ -46,7 +46,7 @@ Required for V1 release:
         - [ ] POST /sso/saml/acs
     - Admin API
         - [ ] GET /admin/audit
-        - [ ] GET /admin/users
+        - [X] GET /admin/users
         - [X] POST /admin/users
         - [ ] GET /admin/users/{user_id}/factors
         - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}

@@ -80,7 +80,7 @@ func TestMain(m *testing.M) {
 
 // 	// Disabled as not working, and not needed now
 // 	// pass := "test"
-// 	// err = c.CreateAdminUser(gotrue.CreateAdminUserRequest{
+// 	// err = c.AdminCreateUser(gotrue.AdminCreateUserRequest{
 // 	// 	UserID:       uuid.NewString(),
 // 	// 	Role:         "anon",
 // 	// 	Email:        "test@example.com",

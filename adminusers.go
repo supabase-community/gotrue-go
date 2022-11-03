@@ -10,9 +10,9 @@ import (
 	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
-const adminUsersPath = "/admin/users/"
+const adminUsersPath = "/admin/users"
 
-type CreateAdminUserRequest struct {
+type AdminCreateUserRequest struct {
 	Aud          string                 `json:"aud"`
 	Role         string                 `json:"role"`
 	Email        string                 `json:"email"`
@@ -24,14 +24,14 @@ type CreateAdminUserRequest struct {
 	AppMetadata  map[string]interface{} `json:"app_metadata"`
 }
 
-type CreateAdminUserResponse struct {
+type AdminCreateUserResponse struct {
 	types.User
 }
 
 // POST /admin/users
 //
 // Creates the user based on the user_id specified.
-func (c *Client) CreateAdminUser(req CreateAdminUserRequest) (*CreateAdminUserResponse, error) {
+func (c *Client) AdminCreateUser(req AdminCreateUserRequest) (*AdminCreateUserResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -56,7 +56,43 @@ func (c *Client) CreateAdminUser(req CreateAdminUserRequest) (*CreateAdminUserRe
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	var res CreateAdminUserResponse
+	var res AdminCreateUserResponse
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+type AdminListUsersResponse struct {
+	Users []types.User `json:"users"`
+}
+
+// GET /admin/users
+//
+// Get a list of users.
+func (c *Client) AdminListUsers() (*AdminListUsersResponse, error) {
+	r, err := c.newRequest(adminUsersPath, http.MethodGet, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(r)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		fullBody, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
+		}
+		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
+	}
+
+	var res AdminListUsersResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
 		return nil, err
