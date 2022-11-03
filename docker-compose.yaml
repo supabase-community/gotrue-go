@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  gotrue:
+    container_name: gotrue
+    depends_on:
+      - postgres
+    image: supabase/gotrue:v2.25.1
+    restart: always
+    ports:
+      - '9999:9999'
+      - '9100:9100'
+    environment:
+      GOTRUE_JWT_SECRET: "secret"
+      GOTRUE_DB_DRIVER: "postgres"
+      NAMESPACE: "auth"
+      DATABASE_URL: "postgres://supabase_auth_admin:root@postgres:5432/postgres"
+      API_EXTERNAL_URL: "http://localhost:9999"
+      GOTRUE_API_HOST: "0.0.0.0"
+      PORT: "9999"
+      GOTRUE_SITE_URL: "http://localhost:3000"
+  postgres:
+    build:
+      context: ./testing
+      dockerfile: Dockerfile.postgres.dev
+    container_name: gotrue_postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+      # sets the schema name, this should match the `NAMESPACE` env var set in your .env file
+      - DB_NAMESPACE=auth
+volumes:
+  postgres_data:

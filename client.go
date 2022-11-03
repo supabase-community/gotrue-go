@@ -46,7 +46,7 @@ func New(projectReference string, apiKey string) *Client {
 // copy will use the new URL.
 //
 // This method does not validate the URL you pass in.
-func (c Client) WithCustomGotrueURL(url string) *Client {
+func (c Client) WithCustomGoTrueURL(url string) *Client {
 	return &Client{
 		client:  c.client,
 		baseURL: url,

@@ -4,7 +4,9 @@ A Golang client library for the [Supabase GoTrue](https://github.com/supabase/go
 
 > ⚠️ Using [`netlify/gotrue`](https://github.com/netlify/gotrue)?
 >
-> The types in this library assume you are interacting with a Supabase GoTrue server, so it is unlikely to work.
+> The types in this library assume you are interacting with a Supabase GoTrue server. It is very unlikely to work with a Netlify GoTrue server.
+
+For more information about the Supabase fork of GoTrue, [check out the project here](https://github.com/supabase/gotrue).
 
 ## Project status
 
@@ -86,12 +88,12 @@ func (*Client) WithToken(token string) *Client
 
 Returns a client that will use the provided token in the `Authorization` header on all requests.
 
-### WithCustomGotrueURL
+### WithCustomGoTrueURL
 ```go
-func (*Client) WithCustomGotrueURL(url string) *Client
+func (*Client) WithCustomGoTrueURL(url string) *Client
 ```
 
-Returns a client that will use the provided URL instead of `https://<project_ref>.supabase.com/auth/v1/`. This allows you to use the client with your own deployment of the Gotrue server without relying on a Supabase-hosted project.
+Returns a client that will use the provided URL instead of `https://<project_ref>.supabase.com/auth/v1/`. This allows you to use the client with your own deployment of the GoTrue server without relying on a Supabase-hosted project.
 
 ### WithClient
 ```go
@@ -99,3 +101,23 @@ func (*Client) WithClient(client http.Client) *Client
 ```
 
 By default, the library uses a default http.Client. If you want to configure your own, pass one in using `WithClient` and it will be used for all requests made with the returned `*gotrue.Client`.
+
+## Testing
+
+> You don't need to know this stuff to use the library
+
+The library is tested against a real GoTrue server running in a docker image. This also requires a postgres server to back it. These are configured using docker compose.
+
+To run these tests, simply `make test`.
+
+To interact with docker compose, you can also use `make up` and `make down`.
+
+### Docker details
+
+> You really don't need to know this stuff to use the library
+
+The postgres server requires some set up beyond the default postgres docker image. For example, it needs to set up the `supabase_auth_admin` user and the `auth` namespace. This is done using `testing/init_postgres.sh`, which is copied into the postgres image's entrypoint directory so that it runs on startup.
+
+This script in run by the `postgres` user, as configured for the postgres image in `docker-compose`. This is why the docker image is configured with `postgres:root`, but the GoTrue server connects to postgres using the newly created `supabase_auth_admin` user, which also uses `root` as its password.
+
+As postgres can take some time to startup and run the entrypoint on it's first run, the GoTrue server will often fail to connect to postgres on the first attempt. This is normal, and it should be restarted by docker compose and eventually succeed in connecting and running migrations.
