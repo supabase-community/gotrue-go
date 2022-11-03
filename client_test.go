@@ -3,11 +3,13 @@ package gotrue_test
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"regexp"
 	"testing"
 
 	backoff "github.com/cenkalti/backoff/v4"
+	jwt "github.com/golang-jwt/jwt/v4"
 
 	"github.com/kwoodhouse93/gotrue-go"
 )
@@ -15,6 +17,7 @@ import (
 const (
 	projectReference = "project_ref"
 	apiKey           = "api_key"
+	jwtSecret        = "secret"
 )
 
 var (
@@ -24,6 +27,31 @@ var (
 	// Used to validate UUIDs.
 	uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$`)
 )
+
+// Utility function to generate some random chars
+func randomString(n int) string {
+	// Using all lower case because email addresses are lowercased by GoTrue.
+	letterBytes := "abcdefghijklmnopqrstuvwxyz"
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
+}
+
+func adminToken() string {
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"aud":  "admin",
+		"sub":  "admin",
+		"role": "supabase_admin",
+		"exp":  9999999999,
+	})
+	token, err := t.SignedString([]byte(jwtSecret))
+	if err != nil {
+		panic(err)
+	}
+	return token
+}
 
 func TestMain(m *testing.M) {
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")

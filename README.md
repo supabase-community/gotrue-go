@@ -18,6 +18,55 @@ For more information about the Supabase fork of GoTrue, [check out the project h
 
 This library is a pre-release work in progress. It has not been thoroughly tested, and the API may be subject to breaking changes, and so it should not be used in production.
 
+Required for V1 release:
+- Implement and test endpoints
+    - Client API
+        - [X] GET /health
+        - [X] GET /settings
+        - [ ] GET /callback
+        - [ ] POST /callback
+        - [ ] GET /authorize
+        - [ ] POST /invite
+        - [ ] POST /signup
+        - [ ] POST /recover
+        - [ ] POST /magiclink
+        - [ ] POST /otp
+        - [ ] POST /token
+        - [ ] GET /verify
+        - [ ] POST /verify
+        - [ ] POST /logout
+        - [ ] GET /reauthenticate
+        - [ ] GET /user
+        - [ ] PUT /user
+        - [ ] POST /factors
+        - [ ] POST /factors/{factor_id}/verify
+        - [ ] POST /factors/{factor_id}/challenge
+        - [ ] DELETE /factors/{factor_id}
+        - [ ] GET /sso/saml/metadata
+        - [ ] POST /sso/saml/acs
+    - Admin API
+        - [ ] GET /admin/audit
+        - [ ] GET /admin/users
+        - [X] POST /admin/users
+        - [ ] GET /admin/users/{user_id}/factors
+        - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}
+        - [ ] PUT /admin/users/{user_id}/factors/{factor_id}
+        - [ ] GET /admin/users/{user_id}
+        - [ ] PUT /admin/users/{user_id}
+        - [ ] DELETE /admin/users/{user_id}
+        - [ ] POST /admin/generate_link
+        - [ ] GET /admin/sso/providers
+        - [ ] POST /admin/sso/providers
+        - [ ] GET /admin/sso/providers/{idp_id}
+        - [ ] PUT /admin/sso/providers/{idp_id}
+        - [ ] DELETE /admin/sso/providers/{idp_id}
+- Test infrastructure
+    - [X] Postgres container with GoTrue config
+    - [X] GoTrue container - signup enabled, autoconfirm off
+    - [ ] GoTrue container - signup enabled, autoconfirm on
+    - [ ] GoTrue container - signup disabled
+    - [ ] Mail server
+
 ## Quick start
 
 ### Install
