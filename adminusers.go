@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/kwoodhouse93/nav-battle/pkg/supabase-gotrue-go/types"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 const adminUsersPath = "/admin/users/"
@@ -15,10 +15,11 @@ const adminUsersPath = "/admin/users/"
 type CreateAdminUserRequest struct {
 	UserID string `json:"-"`
 
+	Aud          string                 `json:"aud"`
 	Role         string                 `json:"role"`
 	Email        string                 `json:"email"`
 	Phone        string                 `json:"phone"`
-	Password     *string                `json:"password,omitempty"` // Only if type = signup
+	Password     *string                `json:"password"` // Only if type = signup
 	EmailConfirm bool                   `json:"email_confirm"`
 	PhoneConfirm bool                   `json:"phone_confirm"`
 	UserMetadata map[string]interface{} `json:"user_metadata"`

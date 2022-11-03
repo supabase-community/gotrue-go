@@ -4,20 +4,26 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"testing"
 
 	backoff "github.com/cenkalti/backoff/v4"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/kwoodhouse93/gotrue-go"
 )
 
-const projectReference = "project_ref"
-const apiKey = "api_key"
-const token = "service_role_token"
+const (
+	projectReference = "project_ref"
+	apiKey           = "api_key"
+)
 
-var client *gotrue.Client
+var (
+	// Global client is used for all tests in this package.
+	client *gotrue.Client
+
+	// Used to validate UUIDs.
+	uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$`)
+)
 
 func TestMain(m *testing.M) {
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
@@ -44,27 +50,6 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestHealth(t *testing.T) {
-	assert := assert.New(t)
-	require := require.New(t)
-
-	client := gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
-	health, err := client.HealthCheck()
-	require.NoError(err)
-	assert.Equal(health.Name, "GoTrue")
-}
-
-// func TestAll(t *testing.T) {
-// 	c := client.WithToken(
-// 		token,
-// 	)
-
-// 	settings, err := c.GetSettings()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	log.Printf("%+v", settings)
-
 // 	// Disabled as not working, and not needed now
 // 	// pass := "test"
 // 	// err = c.CreateAdminUser(gotrue.CreateAdminUserRequest{
@@ -80,7 +65,7 @@ func TestHealth(t *testing.T) {
 
 // 	// signupResp, err := c.Signup(gotrue.SignupRequest{
 // 	// 	Email:    "test@example.com",
-// 	// 	Password: "testme",
+// 	// 	Password: "test me",
 // 	// })
 // 	// if err != nil {
 // 	// 	log.Fatal(err)

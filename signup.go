@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const signupPath = "/signup"
@@ -17,7 +19,7 @@ type SignupRequest struct {
 }
 
 type SignupResponse struct {
-	ID                 string    `json:"id"`
+	ID                 uuid.UUID `json:"id"`
 	Email              string    `json:"email"`
 	ConfirmationSentAt time.Time `json:"confirmation_sent_at"`
 	CreatedAt          time.Time `json:"created_at"`

@@ -1,5 +1,11 @@
 # gotrue-go
 
+![example branch parameter](https://github.com/kwoodhouse93/gotrue-go/actions/workflows/test.yaml/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/kwoodhouse93/gotrue-go/branch/main/graph/badge.svg?token=JQQJKETMRX)](https://codecov.io/gh/kwoodhouse93/gotrue-go)
+![GitHub](https://img.shields.io/github/license/kwoodhouse93/gotrue-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kwoodhouse93/gotrue-go.svg)](https://pkg.go.dev/github.com/kwoodhouse93/gotrue-go)
+
+
 A Golang client library for the [Supabase GoTrue](https://github.com/supabase/gotrue) API.
 
 > ⚠️ Using [`netlify/gotrue`](https://github.com/netlify/gotrue)?
@@ -111,13 +117,3 @@ The library is tested against a real GoTrue server running in a docker image. Th
 To run these tests, simply `make test`.
 
 To interact with docker compose, you can also use `make up` and `make down`.
-
-### Docker details
-
-> You really don't need to know this stuff to use the library
-
-The postgres server requires some set up beyond the default postgres docker image. For example, it needs to set up the `supabase_auth_admin` user and the `auth` namespace. This is done using `testing/init_postgres.sh`, which is copied into the postgres image's entrypoint directory so that it runs on startup.
-
-This script in run by the `postgres` user, as configured for the postgres image in `docker-compose`. This is why the docker image is configured with `postgres:root`, but the GoTrue server connects to postgres using the newly created `supabase_auth_admin` user, which also uses `root` as its password.
-
-As postgres can take some time to startup and run the entrypoint on it's first run, the GoTrue server will often fail to connect to postgres on the first attempt. This is normal, and it should be restarted by docker compose and eventually succeed in connecting and running migrations.

@@ -14,24 +14,32 @@ type ExternalProviders struct {
 	Azure     bool `json:"azure"`
 	Bitbucket bool `json:"bitbucket"`
 	Discord   bool `json:"discord"`
+	Email     bool `json:"email"`
 	Facebook  bool `json:"facebook"`
-	Github    bool `json:"github"`
-	Gitlab    bool `json:"gitlab"`
+	GitHub    bool `json:"github"`
+	GitLab    bool `json:"gitlab"`
 	Google    bool `json:"google"`
 	Keycloak  bool `json:"keycloak"`
-	LinkedIn  bool `json:"linkedin"`
+	Linkedin  bool `json:"linkedin"`
 	Notion    bool `json:"notion"`
-	Spotify   bool `json:"spotify"`
+	Phone     bool `json:"phone"`
+	SAML      bool `json:"saml"`
 	Slack     bool `json:"slack"`
+	Spotify   bool `json:"spotify"`
 	Twitch    bool `json:"twitch"`
 	Twitter   bool `json:"twitter"`
 	WorkOS    bool `json:"workos"`
+	Zoom      bool `json:"zoom"`
 }
 
 type SettingsResponse struct {
-	Autoconfirm   bool              `json:"autoconfirm"`
-	DisableSignup bool              `json:"disable_signup"`
-	External      ExternalProviders `json:"external"`
+	DisableSignup     bool              `json:"disable_signup"`
+	Autoconfirm       bool              `json:"autoconfirm"`
+	MailerAutoconfirm bool              `json:"mailer_autoconfirm"`
+	PhoneAutoconfirm  bool              `json:"phone_autoconfirm"`
+	SmsProvider       string            `json:"sms_provider"`
+	MFAEnabled        bool              `json:"mfa_enabled"`
+	External          ExternalProviders `json:"external"`
 }
 
 // GET /settings
