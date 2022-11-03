@@ -22,6 +22,7 @@ var client *gotrue.Client
 func TestMain(m *testing.M) {
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
 
+	// Ensure the server is ready before running tests.
 	err := backoff.Retry(
 		func() error {
 			health, err := client.HealthCheck()
