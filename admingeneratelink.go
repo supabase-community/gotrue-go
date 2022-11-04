@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 const adminGenerateLinkPath = "/admin/generate_link"
@@ -44,6 +46,8 @@ type AdminGenerateLinkResponse struct {
 	HashedToken      string   `json:"hashed_token"`
 	RedirectTo       string   `json:"redirect_to"`
 	VerificationType LinkType `json:"verification_type"`
+
+	types.User
 }
 
 func validateAdminGenerateLinkRequest(req AdminGenerateLinkRequest) error {
@@ -60,6 +64,11 @@ func validateAdminGenerateLinkRequest(req AdminGenerateLinkRequest) error {
 				message: "email must be provided if Type is magiclink or invite",
 			}
 		}
+		if req.Password != "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "password must not be provided if Type is magiclink or invite",
+			}
+		}
 	case LinkTypeRecovery:
 		if req.Email == "" {
 			return &ErrInvalidGenerateLinkRequest{
@@ -71,6 +80,11 @@ func validateAdminGenerateLinkRequest(req AdminGenerateLinkRequest) error {
 				message: "data must not be provided if Type is recovery",
 			}
 		}
+		if req.Password != "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "password must not be provided if Type is recovery",
+			}
+		}
 	case LinkTypeEmailChangeCurrent, LinkTypeEmailChangeNew:
 		if req.Email == "" || req.NewEmail == "" {
 			return &ErrInvalidGenerateLinkRequest{
@@ -80,6 +94,11 @@ func validateAdminGenerateLinkRequest(req AdminGenerateLinkRequest) error {
 		if len(req.Data) > 0 {
 			return &ErrInvalidGenerateLinkRequest{
 				message: "data must not be provided if Type is email_change_current or email_change_new",
+			}
+		}
+		if req.Password != "" {
+			return &ErrInvalidGenerateLinkRequest{
+				message: "password must not be provided if Type is email_change_current or email_change_new",
 			}
 		}
 	}

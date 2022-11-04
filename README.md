@@ -54,7 +54,7 @@ Required for V1 release:
         - [ ] GET /admin/users/{user_id}
         - [ ] PUT /admin/users/{user_id}
         - [ ] DELETE /admin/users/{user_id}
-        - [ ] POST /admin/generate_link
+        - [X] POST /admin/generate_link
         - [ ] GET /admin/sso/providers
         - [ ] POST /admin/sso/providers
         - [ ] GET /admin/sso/providers/{idp_id}
