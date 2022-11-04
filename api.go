@@ -97,6 +97,13 @@ type Client interface {
 	// doesn't exist.
 	OTP(req types.OTPRequest) error
 
+	// GET /reauthenticate
+	//
+	// Sends a nonce to the user's email (preferred) or phone. This endpoint
+	// requires the user to be logged in / authenticated first. The user needs to
+	// have either an email or phone number for the nonce to be sent successfully.
+	Reauthenticate() error
+
 	// POST /recover
 	//
 	// Password recovery. Will deliver a password recovery mail to the user based
