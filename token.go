@@ -16,9 +16,10 @@ var ErrInvalidTokenRequest = errors.New("token request is invalid - grant_type m
 type TokenRequest struct {
 	GrantType string `json:"-"`
 
-	// Email and Password are required if GrantType is 'password'.
+	// Email or Phone, and Password, are required if GrantType is 'password'.
 	// They must not be provided if GrantType is 'refresh_token'.
 	Email    string `json:"email,omitempty"`
+	Phone    string `json:"phone,omitempty"`
 	Password string `json:"password,omitempty"`
 
 	// RefreshToken is required if GrantType is 'refresh_token'.
@@ -33,6 +34,28 @@ type TokenResponse struct {
 	ExpiresIn    int    `json:"expires_in"`
 }
 
+// Sign in with email and password
+//
+// This is a convenience method that calls Token with the password grant type
+func (c *Client) SignInWithEmailPassword(email, password string) (*TokenResponse, error) {
+	return c.Token(TokenRequest{
+		GrantType: "password",
+		Email:     email,
+		Password:  password,
+	})
+}
+
+// Sign in with phone and password
+//
+// This is a convenience method that calls Token with the password grant type
+func (c *Client) SignInWithPhonePassword(phone, password string) (*TokenResponse, error) {
+	return c.Token(TokenRequest{
+		GrantType: "password",
+		Phone:     phone,
+		Password:  password,
+	})
+}
+
 // POST /token
 //
 // This is an OAuth2 endpoint that currently implements the password and
@@ -40,7 +63,7 @@ type TokenResponse struct {
 func (c *Client) Token(req TokenRequest) (*TokenResponse, error) {
 	switch req.GrantType {
 	case "password":
-		if req.Email == "" || req.Password == "" || req.RefreshToken != "" {
+		if (req.Email == "" && req.Phone == "") || req.Password == "" || req.RefreshToken != "" {
 			return nil, ErrInvalidTokenRequest
 		}
 	case "refresh_token":

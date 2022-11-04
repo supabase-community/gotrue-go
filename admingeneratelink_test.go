@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -15,11 +16,11 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	c := client.WithToken(adminToken())
+	admin := withAdmin(client)
 
 	// Testing signup link
 	email := randomEmail()
-	resp, err := c.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
+	resp, err := admin.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
 		Type:       "signup",
 		Email:      email,
 		Password:   "password",
@@ -36,7 +37,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert.Equal("http://localhost:3000", resp.RedirectTo)
 	assert.Contains(resp.ActionLink, resp.HashedToken)
 
-	assert.Regexp(uuidRegex, resp.ID)
+	assert.NotEqual(uuid.UUID{}, resp.ID)
 	assert.Equal(resp.Email, email)
 	assert.InDelta(time.Now().Unix(), resp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), resp.CreatedAt.Unix(), float64(time.Second))
@@ -130,7 +131,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	}
 	for name, data := range tests {
 		t.Run(name, func(t *testing.T) {
-			_, err := c.AdminGenerateLink(data)
+			_, err := admin.AdminGenerateLink(data)
 			assert.Error(err)
 			assert.ErrorContains(err, "request is invalid")
 		})
@@ -138,7 +139,7 @@ func TestAdminGenerateLink(t *testing.T) {
 
 	// Testing email change links
 	newEmail := randomEmail()
-	resp, err = c.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
+	resp, err = admin.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
 		Type:       "email_change_current",
 		Email:      email,
 		NewEmail:   newEmail,
@@ -153,7 +154,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert.NotEmpty(resp.EmailOTP)
 	assert.Contains(resp.ActionLink, resp.HashedToken)
 
-	assert.Regexp(uuidRegex, resp.ID)
+	assert.NotEqual(uuid.UUID{}, resp.ID)
 	assert.Equal(resp.Email, email)
 	assert.Equal(resp.EmailChange, newEmail)
 	assert.InDelta(time.Now().Unix(), resp.ConfirmationSentAt.Unix(), float64(time.Second))

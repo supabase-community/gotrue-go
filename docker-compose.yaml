@@ -1,14 +1,14 @@
 version: "3.9"
 services:
   gotrue:
+    # Signups enabled, auto-confirm off
     container_name: gotrue
     depends_on:
       - postgres
     image: supabase/gotrue:v2.25.1
-    restart: always
+    restart: on-failure
     ports:
       - '9999:9999'
-      - '9100:9100'
     environment:
       GOTRUE_JWT_SECRET: "secret"
       GOTRUE_DB_DRIVER: "postgres"
@@ -23,6 +23,34 @@ services:
       GOTRUE_RATE_LIMIT_TOKEN_REFRESH: "1000000"
       GOTRUE_MFA_RATE_LIMIT_CHALLENGE_AND_VERIFY: "1000000"
       GOTRUE_SMTP_MAX_FREQUENCY: "1ns"
+
+  gotrue_autoconfirm:
+    # Signups enabled, auto-confirm on
+    container_name: gotrue_autoconfirm
+    depends_on:
+      - postgres
+    image: supabase/gotrue:v2.25.1
+    restart: on-failure
+    ports:
+      - '9998:9998'
+    environment:
+      GOTRUE_JWT_SECRET: "secret"
+      GOTRUE_DB_DRIVER: "postgres"
+      NAMESPACE: "auth"
+      DATABASE_URL: "postgres://supabase_auth_admin:root@postgres:5432/postgres"
+      API_EXTERNAL_URL: "http://localhost:9998"
+      GOTRUE_API_HOST: "0.0.0.0"
+      PORT: "9998"
+      GOTRUE_SITE_URL: "http://localhost:3000"
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: "1000000"
+      GOTRUE_RATE_LIMIT_VERIFY: "1000000"
+      GOTRUE_RATE_LIMIT_TOKEN_REFRESH: "1000000"
+      GOTRUE_MFA_RATE_LIMIT_CHALLENGE_AND_VERIFY: "1000000"
+      GOTRUE_SMTP_MAX_FREQUENCY: "1ns"
+      GOTRUE_MAILER_AUTOCONFIRM: 'true'
+      GOTRUE_SMS_AUTOCONFIRM: 'true'
+      GOTRUE_EXTERNAL_PHONE_ENABLED: 'true'
+
   postgres:
     build:
       context: ./testing

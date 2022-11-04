@@ -3,6 +3,7 @@ package gotrue_test
 import (
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -13,7 +14,7 @@ func TestAdminCreateUser(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	c := client.WithToken(adminToken())
+	admin := withAdmin(client)
 
 	pass := "password"
 	email := randomEmail()
@@ -22,7 +23,7 @@ func TestAdminCreateUser(t *testing.T) {
 		Role:     "admin",
 		Password: &pass,
 	}
-	resp, err := c.AdminCreateUser(req)
+	resp, err := admin.AdminCreateUser(req)
 	require.NoError(err)
 	require.Regexp(uuidRegex, resp.ID)
 	assert.Equal(resp.Email, email)
@@ -33,7 +34,7 @@ func TestAdminListUsers(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	c := client.WithToken(adminToken())
+	admin := withAdmin(client)
 
 	// Create a user that we know should be returned
 	pass := "password"
@@ -43,16 +44,16 @@ func TestAdminListUsers(t *testing.T) {
 		Role:     "test",
 		Password: &pass,
 	}
-	createResp, err := c.AdminCreateUser(req)
+	createResp, err := admin.AdminCreateUser(req)
 	require.NoError(err)
 	require.Regexp(uuidRegex, createResp.ID)
 
 	// Then list and look up the user we just created
-	resp, err := c.AdminListUsers()
+	resp, err := admin.AdminListUsers()
 	require.NoError(err)
 	assert.NotEmpty(resp)
 	for _, u := range resp.Users {
-		assert.Regexp(uuidRegex, u.ID)
+		assert.NotEqual(uuid.UUID{}, u.ID)
 		if u.ID == createResp.ID {
 			assert.Equal(u.Email, createResp.Email)
 		}

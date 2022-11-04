@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -21,7 +22,7 @@ func TestSignup(t *testing.T) {
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.Regexp(uuidRegex, userResp.ID)
+	assert.NotEqual(uuid.UUID{}, userResp.ID)
 	assert.Equal(userResp.Email, email)
 	assert.InDelta(time.Now().Unix(), userResp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), userResp.CreatedAt.Unix(), float64(time.Second))
@@ -33,7 +34,7 @@ func TestSignup(t *testing.T) {
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.Regexp(uuidRegex, dupeUserResp.ID)
+	assert.NotEqual(uuid.UUID{}, dupeUserResp.ID)
 	assert.Equal(dupeUserResp.Email, email)
 	assert.InDelta(time.Now().Unix(), dupeUserResp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), dupeUserResp.CreatedAt.Unix(), float64(time.Second))

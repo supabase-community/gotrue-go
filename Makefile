@@ -11,7 +11,7 @@ down:
 	@docker compose -f docker-compose.yaml down 2>/dev/null && echo "${GREEN}Removed${NC}"
 
 test: up
-	-go test -count=1 -v ./...
+	-go test -v ./...
 	@make down
 
 test_ci:

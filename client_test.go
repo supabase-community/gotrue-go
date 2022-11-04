@@ -21,14 +21,14 @@ const (
 )
 
 var (
-	// Global client is used for all tests in this package.
-	client *gotrue.Client
+	// Global clients are used for all tests in this package.
+	client            *gotrue.Client
+	autoconfirmClient *gotrue.Client
 
 	// Used to validate UUIDs.
 	uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$`)
 )
 
-// Utility function to generate some random chars
 func randomString(n int) string {
 	// Using all lower case because email addresses are lowercased by GoTrue.
 	letterBytes := "abcdefghijklmnopqrstuvwxyz"
@@ -39,9 +39,21 @@ func randomString(n int) string {
 	return string(b)
 }
 
-// Utility function to generate a random email address.
 func randomEmail() string {
 	return fmt.Sprintf("%s@test.com", randomString(10))
+}
+
+func randomNumberString(n int) string {
+	numberBytes := "0123456789"
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = numberBytes[rand.Intn(len(numberBytes))]
+	}
+	return string(b)
+}
+
+func randomPhoneNumber() string {
+	return fmt.Sprintf("+1%s", randomNumberString(10))
 }
 
 func adminToken() string {
@@ -58,13 +70,28 @@ func adminToken() string {
 	return token
 }
 
+func withAdmin(c *gotrue.Client) *gotrue.Client {
+	return c.WithToken(adminToken())
+}
+
 func TestMain(m *testing.M) {
+	// Please refer to docker-compose.yaml and /testing/README.md for more info
+	// on this test set up.
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
+	autoconfirmClient = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9998")
 
 	// Ensure the server is ready before running tests.
 	err := backoff.Retry(
 		func() error {
 			health, err := client.HealthCheck()
+			if err != nil {
+				return err
+			}
+			if health.Name != "GoTrue" {
+				return fmt.Errorf("health check - unexpected server name: %s", health.Name)
+			}
+
+			health, err = autoconfirmClient.HealthCheck()
 			if err != nil {
 				return err
 			}
@@ -82,34 +109,3 @@ func TestMain(m *testing.M) {
 	code := m.Run()
 	os.Exit(code)
 }
-
-// 	// Disabled as not working, and not needed now
-// 	// pass := "test"
-// 	// err = c.AdminCreateUser(gotrue.AdminCreateUserRequest{
-// 	// 	UserID:       uuid.NewString(),
-// 	// 	Role:         "anon",
-// 	// 	Email:        "test@example.com",
-// 	// 	EmailConfirm: true,
-// 	// 	Password:     &pass,
-// 	// })
-// 	// if err != nil {
-// 	// 	log.Fatal(err)
-// 	// }
-
-// 	// signupResp, err := c.Signup(gotrue.SignupRequest{
-// 	// 	Email:    "test@example.com",
-// 	// 	Password: "test me",
-// 	// })
-// 	// if err != nil {
-// 	// 	log.Fatal(err)
-// 	// }
-// 	// log.Printf("%+v", signupResp)
-
-// 	// inviteResp, err := c.Invite(gotrue.InviteRequest{
-// 	// 	Email: "test@example.com",
-// 	// })
-// 	// if err != nil {
-// 	// 	log.Fatal(err)
-// 	// }
-// 	// log.Printf("%+v", inviteResp)
-// }
