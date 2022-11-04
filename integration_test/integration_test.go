@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
 	"regexp"
 	"testing"
 
 	backoff "github.com/cenkalti/backoff/v4"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/kwoodhouse93/gotrue-go"
 )
@@ -118,4 +121,35 @@ func TestMain(m *testing.M) {
 
 	code := m.Run()
 	os.Exit(code)
+}
+
+func TestWithClient(t *testing.T) {
+	t.Parallel()
+
+	assert := assert.New(t)
+	require := require.New(t)
+
+	c := gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
+	h, err := c.HealthCheck()
+	require.NoError(err)
+	assert.Equal("GoTrue", h.Name)
+
+	roundTripper := &customRoundTripper{}
+	c = c.WithClient(http.Client{
+		Transport: roundTripper,
+	})
+	h, err = c.HealthCheck()
+	require.NoError(err)
+	assert.Equal("GoTrue", h.Name)
+	assert.True(roundTripper.visited)
+}
+
+type customRoundTripper struct {
+	visited bool
+}
+
+func (c *customRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	c.visited = true
+	subC := http.Client{}
+	return subC.Do(req)
 }
