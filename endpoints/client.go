@@ -50,3 +50,15 @@ func (c Client) WithClient(client http.Client) *Client {
 		token:   c.token,
 	}
 }
+
+// Returns a copy of a HTTP client that will not follow redirects.
+func noRedirClient(client http.Client) http.Client {
+	return http.Client{
+		Transport: client.Transport,
+		Jar:       client.Jar,
+		Timeout:   client.Timeout,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+}

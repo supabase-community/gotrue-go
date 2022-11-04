@@ -23,8 +23,8 @@ Required for V1 release:
     - Client API
         - [X] GET /health
         - [X] GET /settings
-        - [ ] GET /callback
-        - [ ] POST /callback
+        - [X] GET /callback
+        - [X] POST /callback
         - [X] GET /authorize
         - [X] POST /invite
         - [X] POST /signup
@@ -173,3 +173,4 @@ To interact with docker compose, you can also use `make up` and `make down`.
 Prior users of [`gotrue-js`](https://github.com/supabase/gotrue-js) may be familiar with its subscription mechanism and session management - in line with its ability to be used as a client-side authentication library, in addition to use on the server.
 
 As Go is typically used on the backend, this library acts purely as a convenient wrapper for interacting with a GoTrue server. It provides no session management or subscription mechanism.
+

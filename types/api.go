@@ -217,3 +217,31 @@ type UpdateUserRequest struct {
 type UpdateUserResponse struct {
 	User
 }
+
+type VerificationType string
+
+const (
+	VerificationTypeSignup      = "signup"
+	VerificationTypeRecovery    = "recovery"
+	VerificationTypeInvite      = "invite"
+	VerificationTypeMagiclink   = "magiclink"
+	VerificationTypeEmailChange = "email_change"
+	VerificationTypeSMS         = "sms"
+	VerificationTypePhoneChange = "phone_change"
+)
+
+type VerifyRequest struct {
+	Type       VerificationType `json:"type"`
+	Token      string           `json:"token"`
+	Email      string           `json:"email"`
+	Phone      string           `json:"phone"`
+	RedirectTo string           `json:"redirect_to"`
+}
+
+type VerifyResponse struct {
+	URL string
+
+	Error            string
+	ErrorCode        string
+	ErrorDescription string
+}

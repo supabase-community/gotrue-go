@@ -6,8 +6,10 @@ import (
 	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
-// --- API ---
-
+// Create a new client using gotrue.New, then you can call the methods below.
+//
+// Some methods require bearer token authentication. To set the bearer token,
+// use the WithToken(token) method.
 type Client interface {
 	// By default, the client will use the supabase project reference and assume
 	// you are connecting to the GoTrue server as part of a supabase project.
@@ -36,6 +38,8 @@ type Client interface {
 	// It returns a copy of the client, so only requests made with the returned
 	// copy will use the new HTTP client.
 	WithClient(client http.Client) Client
+
+	// Endpoints:
 
 	// POST /admin/generate_link
 	//
@@ -70,6 +74,13 @@ type Client interface {
 	// follow the redirect, but instead returns the URL the client was told to
 	// redirect to.
 	Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse, error)
+
+	// GET/POST /callback
+	//
+	// Callback endpoint for external oauth providers to redirect to.
+	//
+	// There is no meaningful implementation of this as a client method, so it is
+	// not included here.
 
 	// GET /health
 	//
@@ -162,4 +173,13 @@ type Client interface {
 	// this method can be used to set custom user data. Changing the email will
 	// result in a magiclink being sent out.
 	UpdateUser(req types.UpdateUserRequest) (*types.UpdateUserResponse, error)
+
+	// POST /verify
+	//
+	// Verify a registration or a password recovery. Type can be signup or recovery
+	// or magiclink or invite and the token is a token returned from either /signup
+	// or /recover or /magiclink.
+	//
+	// GET /verify also exists, but cannot take email or phone parameters.
+	Verify(req types.VerifyRequest) (*types.VerifyResponse, error)
 }
