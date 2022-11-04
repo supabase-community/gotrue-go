@@ -49,4 +49,30 @@ func TestSignup(t *testing.T) {
 	})
 	assert.Error(err)
 	assert.Nil(user)
+
+	// Autoconfirmed signup
+	// Should return a session
+	email = randomEmail()
+	session, err := autoconfirmClient.Signup(gotrue.SignupRequest{
+		Email:    email,
+		Password: "password",
+	})
+	require.NoError(err)
+	assert.NotEqual(uuid.UUID{}, session.ID)
+	assert.Equal(session.Email, email)
+	assert.InDelta(time.Now().Unix(), session.CreatedAt.Unix(), float64(time.Second))
+	assert.InDelta(time.Now().Unix(), session.UpdatedAt.Unix(), float64(time.Second))
+	assert.NotEmpty(session.AccessToken)
+	assert.NotEmpty(session.RefreshToken)
+	assert.Equal("bearer", session.TokenType)
+	assert.Equal(3600, session.ExpiresIn)
+
+	// Sign up with signups disabled
+	email = randomEmail()
+	user, err = signupDisabledClient.Signup(gotrue.SignupRequest{
+		Email:    email,
+		Password: "password",
+	})
+	assert.Error(err)
+	assert.Nil(user)
 }

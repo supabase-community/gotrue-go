@@ -47,9 +47,36 @@ services:
       GOTRUE_RATE_LIMIT_TOKEN_REFRESH: "1000000"
       GOTRUE_MFA_RATE_LIMIT_CHALLENGE_AND_VERIFY: "1000000"
       GOTRUE_SMTP_MAX_FREQUENCY: "1ns"
-      GOTRUE_MAILER_AUTOCONFIRM: 'true'
-      GOTRUE_SMS_AUTOCONFIRM: 'true'
-      GOTRUE_EXTERNAL_PHONE_ENABLED: 'true'
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+      GOTRUE_SMS_AUTOCONFIRM: "true"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "true"
+
+  gotrue_signup_disabled:
+    # Signups disabled
+    container_name: gotrue_signup_disabled
+    depends_on:
+      - postgres
+    image: supabase/gotrue:v2.25.1
+    restart: on-failure
+    ports:
+      - '9997:9997'
+    environment:
+      GOTRUE_JWT_SECRET: "secret"
+      GOTRUE_DB_DRIVER: "postgres"
+      NAMESPACE: "auth"
+      DATABASE_URL: "postgres://supabase_auth_admin:root@postgres:5432/postgres"
+      API_EXTERNAL_URL: "http://localhost:9997"
+      GOTRUE_API_HOST: "0.0.0.0"
+      PORT: "9997"
+      GOTRUE_SITE_URL: "http://localhost:3000"
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: "1000000"
+      GOTRUE_RATE_LIMIT_VERIFY: "1000000"
+      GOTRUE_RATE_LIMIT_TOKEN_REFRESH: "1000000"
+      GOTRUE_MFA_RATE_LIMIT_CHALLENGE_AND_VERIFY: "1000000"
+      GOTRUE_SMTP_MAX_FREQUENCY: "1ns"
+      GOTRUE_DISABLE_SIGNUP: "true"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "false"
 
   postgres:
     build:

@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/google/uuid"
+
 	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
@@ -24,11 +26,7 @@ type SignupResponse struct {
 	types.User
 
 	// Response if autoconfirm is on
-	AccessToken  string     `json:"access_token"`
-	RefreshToken string     `json:"refresh_token"`
-	TokenType    string     `json:"token_type"`
-	ExpiresIn    int        `json:"expires_in"`
-	SessionUser  types.User `json:"user"`
+	types.Session
 }
 
 // POST /signup
@@ -62,6 +60,16 @@ func (c *Client) Signup(req SignupRequest) (*SignupResponse, error) {
 	var res SignupResponse
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		return nil, err
+	}
+
+	// To make the response easier to consume, if autoconfirm was enabled, the
+	// session user should be popuated. Copy that into the embedded user type
+	// so it's easier to access.
+	//
+	// i.e. we can access user fields like res.Email regardless of whether
+	// we got back a session or a user.
+	if res.Session.User.ID != uuid.Nil {
+		res.User = res.Session.User
 	}
 
 	return &res, nil

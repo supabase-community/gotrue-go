@@ -64,7 +64,7 @@ Required for V1 release:
     - [X] Postgres container with GoTrue config
     - [X] GoTrue container - signup enabled, autoconfirm off
     - [X] GoTrue container - signup enabled, autoconfirm on
-    - [ ] GoTrue container - signup disabled
+    - [X] GoTrue container - signup disabled
     - [ ] Mail server
 - [ ] Support for Captcha tokens
 

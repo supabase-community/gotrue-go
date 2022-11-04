@@ -22,8 +22,9 @@ const (
 
 var (
 	// Global clients are used for all tests in this package.
-	client            *gotrue.Client
-	autoconfirmClient *gotrue.Client
+	client               *gotrue.Client
+	autoconfirmClient    *gotrue.Client
+	signupDisabledClient *gotrue.Client
 
 	// Used to validate UUIDs.
 	uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$`)
@@ -79,6 +80,7 @@ func TestMain(m *testing.M) {
 	// on this test set up.
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
 	autoconfirmClient = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9998")
+	signupDisabledClient = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9997")
 
 	// Ensure the server is ready before running tests.
 	err := backoff.Retry(
@@ -92,6 +94,14 @@ func TestMain(m *testing.M) {
 			}
 
 			health, err = autoconfirmClient.HealthCheck()
+			if err != nil {
+				return err
+			}
+			if health.Name != "GoTrue" {
+				return fmt.Errorf("health check - unexpected server name: %s", health.Name)
+			}
+
+			health, err = signupDisabledClient.HealthCheck()
 			if err != nil {
 				return err
 			}
