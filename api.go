@@ -43,14 +43,20 @@ type Client interface {
 	// Among other things, the response also contains the query params of the action
 	// link as separate JSON fields for convenience (along with the email OTP from
 	// which the corresponding token is generated).
+	//
+	// Requires admin token.
 	AdminGenerateLink(req types.AdminGenerateLinkRequest) (*types.AdminGenerateLinkResponse, error)
 	// POST /admin/users
 	//
 	// Creates the user based on the user_id specified.
+	//
+	// Requires admin token.
 	AdminCreateUser(req types.AdminCreateUserRequest) (*types.AdminCreateUserResponse, error)
 	// GET /admin/users
 	//
 	// Get a list of users.
+	//
+	// Requires admin token.
 	AdminListUsers() (*types.AdminListUsersResponse, error)
 
 	// GET /health
@@ -61,7 +67,8 @@ type Client interface {
 	// POST /invite
 	//
 	// Invites a new user with an email.
-	// This endpoint requires the service_role or supabase_admin JWT set using WithToken.
+	//
+	// Requires service_role or admin token.
 	Invite(req types.InviteRequest) (*types.InviteResponse, error)
 
 	// GET /settings

@@ -3,7 +3,6 @@ package types
 import (
 	"errors"
 	"fmt"
-	"time"
 )
 
 // --- Errors ---
@@ -81,16 +80,12 @@ type HealthCheckResponse struct {
 }
 
 type InviteRequest struct {
-	Email string `json:"email"`
+	Email string                 `json:"email"`
+	Data  map[string]interface{} `json:"data"`
 }
 
 type InviteResponse struct {
-	ID                 string    `json:"id"`
-	Email              string    `json:"email"`
-	ConfirmationSentAt time.Time `json:"confirmation_sent_at"`
-	CreatedAt          time.Time `json:"created_at"`
-	UpdatedAt          time.Time `json:"updated_at"`
-	InvitedAt          time.Time `json:"invited_at"`
+	User
 }
 
 type ExternalProviders struct {

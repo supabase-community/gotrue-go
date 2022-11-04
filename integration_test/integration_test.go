@@ -76,7 +76,7 @@ func withAdmin(c gotrue.Client) gotrue.Client {
 }
 
 func TestMain(m *testing.M) {
-	// Please refer to docker-compose.yaml and /testing/README.md for more info
+	// Please refer to ./setup/docker-compose.yaml and ./README.md for more info
 	// on this test set up.
 	client = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9999")
 	autoconfirmClient = gotrue.New(projectReference, apiKey).WithCustomGoTrueURL("http://localhost:9998")
