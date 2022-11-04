@@ -22,7 +22,7 @@ func TestSignup(t *testing.T) {
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.NotEqual(uuid.UUID{}, userResp.ID)
+	assert.NotEqual(uuid.Nil, userResp.ID)
 	assert.Equal(userResp.Email, email)
 	assert.InDelta(time.Now().Unix(), userResp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), userResp.CreatedAt.Unix(), float64(time.Second))
@@ -34,7 +34,7 @@ func TestSignup(t *testing.T) {
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.NotEqual(uuid.UUID{}, dupeUserResp.ID)
+	assert.NotEqual(uuid.Nil, dupeUserResp.ID)
 	assert.Equal(dupeUserResp.Email, email)
 	assert.InDelta(time.Now().Unix(), dupeUserResp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), dupeUserResp.CreatedAt.Unix(), float64(time.Second))
@@ -58,7 +58,7 @@ func TestSignup(t *testing.T) {
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.NotEqual(uuid.UUID{}, session.ID)
+	assert.NotEqual(uuid.Nil, session.ID)
 	assert.Equal(session.Email, email)
 	assert.InDelta(time.Now().Unix(), session.CreatedAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), session.UpdatedAt.Unix(), float64(time.Second))

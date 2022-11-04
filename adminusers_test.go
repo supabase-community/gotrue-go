@@ -53,7 +53,7 @@ func TestAdminListUsers(t *testing.T) {
 	require.NoError(err)
 	assert.NotEmpty(resp)
 	for _, u := range resp.Users {
-		assert.NotEqual(uuid.UUID{}, u.ID)
+		assert.NotEqual(uuid.Nil, u.ID)
 		if u.ID == createResp.ID {
 			assert.Equal(u.Email, createResp.Email)
 		}

@@ -37,7 +37,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert.Equal("http://localhost:3000", resp.RedirectTo)
 	assert.Contains(resp.ActionLink, resp.HashedToken)
 
-	assert.NotEqual(uuid.UUID{}, resp.ID)
+	assert.NotEqual(uuid.Nil, resp.ID)
 	assert.Equal(resp.Email, email)
 	assert.InDelta(time.Now().Unix(), resp.ConfirmationSentAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), resp.CreatedAt.Unix(), float64(time.Second))
@@ -154,7 +154,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert.NotEmpty(resp.EmailOTP)
 	assert.Contains(resp.ActionLink, resp.HashedToken)
 
-	assert.NotEqual(uuid.UUID{}, resp.ID)
+	assert.NotEqual(uuid.Nil, resp.ID)
 	assert.Equal(resp.Email, email)
 	assert.Equal(resp.EmailChange, newEmail)
 	assert.InDelta(time.Now().Unix(), resp.ConfirmationSentAt.Unix(), float64(time.Second))
