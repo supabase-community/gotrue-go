@@ -34,7 +34,7 @@ Required for V1 release:
         - [X] POST /token
         - [ ] GET /verify
         - [ ] POST /verify
-        - [ ] POST /logout
+        - [X] POST /logout
         - [ ] GET /reauthenticate
         - [X] GET /user
         - [ ] PUT /user

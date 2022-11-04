@@ -71,6 +71,14 @@ type Client interface {
 	// Requires service_role or admin token.
 	Invite(req types.InviteRequest) (*types.InviteResponse, error)
 
+	// POST /logout
+	//
+	// Logout a user (Requires authentication).
+	//
+	// This will revoke all refresh tokens for the user. Remember that the JWT
+	// tokens will still be valid for stateless auth until they expires.
+	Logout() error
+
 	// GET /settings
 	//
 	// Returns the publicly available settings for this gotrue instance.
