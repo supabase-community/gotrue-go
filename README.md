@@ -27,7 +27,7 @@ Required for V1 release:
         - [ ] POST /callback
         - [ ] GET /authorize
         - [ ] POST /invite
-        - [ ] POST /signup
+        - [X] POST /signup
         - [ ] POST /recover
         - [ ] POST /magiclink
         - [ ] POST /otp
@@ -66,6 +66,7 @@ Required for V1 release:
     - [ ] GoTrue container - signup enabled, autoconfirm on
     - [ ] GoTrue container - signup disabled
     - [ ] Mail server
+- [ ] Support for Captcha tokens
 
 ## Quick start
 

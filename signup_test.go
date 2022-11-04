@@ -14,15 +14,38 @@ func TestSignup(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	// Create a new user
-	user, err := client.Signup(gotrue.SignupRequest{
-		Email:    "example@test.com",
+	// Signup with email
+	email := randomEmail()
+	userResp, err := client.Signup(gotrue.SignupRequest{
+		Email:    email,
 		Password: "password",
 	})
 	require.NoError(err)
-	assert.Regexp(uuidRegex, user.ID)
-	assert.Equal(user.Email, "example@test.com")
-	assert.InDelta(time.Now().Unix(), user.ConfirmationSentAt.Unix(), float64(time.Second))
-	assert.InDelta(time.Now().Unix(), user.CreatedAt.Unix(), float64(time.Second))
-	assert.InDelta(time.Now().Unix(), user.UpdatedAt.Unix(), float64(time.Second))
+	assert.Regexp(uuidRegex, userResp.ID)
+	assert.Equal(userResp.Email, email)
+	assert.InDelta(time.Now().Unix(), userResp.ConfirmationSentAt.Unix(), float64(time.Second))
+	assert.InDelta(time.Now().Unix(), userResp.CreatedAt.Unix(), float64(time.Second))
+	assert.InDelta(time.Now().Unix(), userResp.UpdatedAt.Unix(), float64(time.Second))
+
+	// Duplicate signup
+	dupeUserResp, err := client.Signup(gotrue.SignupRequest{
+		Email:    email,
+		Password: "password",
+	})
+	require.NoError(err)
+	assert.Regexp(uuidRegex, dupeUserResp.ID)
+	assert.Equal(dupeUserResp.Email, email)
+	assert.InDelta(time.Now().Unix(), dupeUserResp.ConfirmationSentAt.Unix(), float64(time.Second))
+	assert.InDelta(time.Now().Unix(), dupeUserResp.CreatedAt.Unix(), float64(time.Second))
+	assert.InDelta(time.Now().Unix(), dupeUserResp.UpdatedAt.Unix(), float64(time.Second))
+	assert.Equal(userResp.ID, dupeUserResp.ID)
+
+	// Sign up with phone
+	// Will error because SMS is not configured on the test server.
+	user, err := client.Signup(gotrue.SignupRequest{
+		Phone:    "+15555555555",
+		Password: "password",
+	})
+	assert.Error(err)
+	assert.Nil(user)
 }

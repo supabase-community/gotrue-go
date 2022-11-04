@@ -6,24 +6,21 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 const signupPath = "/signup"
 
 type SignupRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string                 `json:"email"`
+	Phone    string                 `json:"phone"`
+	Password string                 `json:"password"`
+	Data     map[string]interface{} `json:"data"`
 }
 
 type SignupResponse struct {
-	ID                 uuid.UUID `json:"id"`
-	Email              string    `json:"email"`
-	ConfirmationSentAt time.Time `json:"confirmation_sent_at"`
-	CreatedAt          time.Time `json:"created_at"`
-	UpdatedAt          time.Time `json:"updated_at"`
+	types.User
 }
 
 // POST /signup
