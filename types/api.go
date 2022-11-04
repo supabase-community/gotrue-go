@@ -73,6 +73,37 @@ type AdminListUsersResponse struct {
 	Users []User `json:"users"`
 }
 
+type Provider string
+
+const (
+	ProviderApple     Provider = "apple"
+	ProviderAzure     Provider = "azure"
+	ProviderBitbucket Provider = "bitbucket"
+	ProviderDiscord   Provider = "discord"
+	ProviderGitHub    Provider = "github"
+	ProviderGitLab    Provider = "gitlab"
+	ProviderGoogle    Provider = "google"
+	ProviderKeycloak  Provider = "keycloak"
+	ProviderLinkedin  Provider = "linkedin"
+	ProviderFacebook  Provider = "facebook"
+	ProviderNotion    Provider = "notion"
+	ProviderSpotify   Provider = "spotify"
+	ProviderSlack     Provider = "slack"
+	ProviderTwitch    Provider = "twitch"
+	ProviderTwitter   Provider = "twitter"
+	ProviderWorkOS    Provider = "workos"
+	ProviderZoom      Provider = "zoom"
+)
+
+type AuthorizeRequest struct {
+	Provider Provider
+	Scopes   string
+}
+
+type AuthorizeResponse struct {
+	AuthorizationURL string
+}
+
 type HealthCheckResponse struct {
 	Version     string `json:"version"`
 	Name        string `json:"name"`

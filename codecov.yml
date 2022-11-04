@@ -1,0 +1,8 @@
+coverage:
+  round: up
+  range: "40...80"
+  status:
+    project:
+      default:
+        target: 60%
+    patch: off

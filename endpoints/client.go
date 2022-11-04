@@ -3,6 +3,7 @@ package endpoints
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type Client struct {
@@ -15,7 +16,9 @@ type Client struct {
 func New(projectReference string, apiKey string) *Client {
 	baseURL := fmt.Sprintf("https://%s.supabase.co/auth/v1", projectReference)
 	return &Client{
-		client:  http.Client{},
+		client: http.Client{
+			Timeout: time.Second * 10,
+		},
 		baseURL: baseURL,
 		apiKey:  apiKey,
 	}

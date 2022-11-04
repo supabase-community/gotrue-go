@@ -59,9 +59,21 @@ type Client interface {
 	// Requires admin token.
 	AdminListUsers() (*types.AdminListUsersResponse, error)
 
+	// GET /authorize
+	//
+	// Get access_token from external oauth provider.
+	//
+	// Scopes are optional additional scopes depending on the provider (email and
+	// name are requested by default).
+	//
+	// If successful, the server returns a redirect response. This method will not
+	// follow the redirect, but instead returns the URL the client was told to
+	// redirect to.
+	Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse, error)
+
 	// GET /health
 	//
-	// Check the health of the GoTrue server
+	// Check the health of the GoTrue server.
 	HealthCheck() (*types.HealthCheckResponse, error)
 
 	// POST /invite

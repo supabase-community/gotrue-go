@@ -50,6 +50,10 @@ services:
       GOTRUE_MAILER_AUTOCONFIRM: "true"
       GOTRUE_SMS_AUTOCONFIRM: "true"
       GOTRUE_EXTERNAL_PHONE_ENABLED: "true"
+      GOTRUE_EXTERNAL_GITHUB_ENABLED: "true"
+      GOTRUE_EXTERNAL_GITHUB_CLIENT_ID: "myappclientid"
+      GOTRUE_EXTERNAL_GITHUB_SECRET: "clientsecretvaluessssh"
+      GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI: "http://localhost:3000/callback"
 
   gotrue_signup_disabled:
     # Signups disabled

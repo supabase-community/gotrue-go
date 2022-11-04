@@ -25,7 +25,7 @@ Required for V1 release:
         - [X] GET /settings
         - [ ] GET /callback
         - [ ] POST /callback
-        - [ ] GET /authorize
+        - [X] GET /authorize
         - [X] POST /invite
         - [X] POST /signup
         - [X] POST /recover
