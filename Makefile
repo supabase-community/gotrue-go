@@ -16,5 +16,5 @@ test: up
 
 test_ci:
 	docker compose -f integration_test/setup/docker-compose.yaml up -d --build
-	-go test -v -count=1 -race -coverprofile=coverage.txt -covermode=atomic ./...
+	-go test -v -count=1 -race -coverprofile=coverage.txt -coverpkg=./... -covermode=atomic ./...
 	docker compose -f integration_test/setup/docker-compose.yaml down

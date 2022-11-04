@@ -26,7 +26,7 @@ Required for V1 release:
         - [ ] GET /callback
         - [ ] POST /callback
         - [ ] GET /authorize
-        - [ ] POST /invite
+        - [X] POST /invite
         - [X] POST /signup
         - [ ] POST /recover
         - [ ] POST /magiclink
