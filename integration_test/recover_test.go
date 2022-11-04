@@ -8,15 +8,15 @@ import (
 	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
-func TestMagiclink(t *testing.T) {
+func TestRecover(t *testing.T) {
 	assert := assert.New(t)
 
 	email := randomEmail()
-	err := client.Magiclink(types.MagiclinkRequest{
+	err := client.Recover(types.RecoverRequest{
 		Email: email,
 	})
 	assert.NoError(err)
 
-	err = client.Magiclink(types.MagiclinkRequest{})
+	err = client.Recover(types.RecoverRequest{})
 	assert.Error(err)
 }

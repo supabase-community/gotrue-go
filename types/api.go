@@ -100,6 +100,10 @@ type OTPRequest struct {
 	Data       map[string]interface{} `json:"data"`
 }
 
+type RecoverRequest struct {
+	Email string `json:"email"`
+}
+
 type ExternalProviders struct {
 	Apple     bool `json:"apple"`
 	Azure     bool `json:"azure"`

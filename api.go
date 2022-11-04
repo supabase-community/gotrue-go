@@ -97,6 +97,14 @@ type Client interface {
 	// doesn't exist.
 	OTP(req types.OTPRequest) error
 
+	// POST /recover
+	//
+	// Password recovery. Will deliver a password recovery mail to the user based
+	// on email address.
+	//
+	// By default recovery links can only be sent once every 60 seconds.
+	Recover(req types.RecoverRequest) error
+
 	// GET /settings
 	//
 	// Returns the publicly available settings for this gotrue instance.

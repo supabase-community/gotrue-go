@@ -28,7 +28,7 @@ Required for V1 release:
         - [ ] GET /authorize
         - [X] POST /invite
         - [X] POST /signup
-        - [ ] POST /recover
+        - [X] POST /recover
         - [X] POST /magiclink
         - [X] POST /otp
         - [X] POST /token
