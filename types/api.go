@@ -157,3 +157,16 @@ type TokenResponse struct {
 type UserResponse struct {
 	User
 }
+
+type UpdateUserRequest struct {
+	Email    string                 `json:"email"`
+	Password *string                `json:"password"`
+	Nonce    string                 `json:"nonce"`
+	Data     map[string]interface{} `json:"data"`
+	AppData  map[string]interface{} `json:"app_metadata,omitempty"`
+	Phone    string                 `json:"phone"`
+}
+
+type UpdateUserResponse struct {
+	User
+}

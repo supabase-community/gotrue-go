@@ -32,4 +32,13 @@ func TestUser(t *testing.T) {
 	assert.Equal(email, user.Email)
 	assert.InDelta(time.Now().Unix(), user.CreatedAt.Unix(), float64(time.Second))
 	assert.InDelta(time.Now().Unix(), user.UpdatedAt.Unix(), float64(time.Second))
+
+	// Modify user metadata
+	updateResp, err := client.WithToken(session.AccessToken).UpdateUser(types.UpdateUserRequest{
+		Data: map[string]interface{}{
+			"foo": "bar",
+		},
+	})
+	require.NoError(err)
+	assert.Equal("bar", updateResp.UserMetadata["foo"])
 }

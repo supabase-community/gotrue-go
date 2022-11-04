@@ -111,4 +111,10 @@ type Client interface {
 	//
 	// Get the JSON object for the logged in user (requires authentication)
 	GetUser() (*types.UserResponse, error)
+	// PUT /user
+	//
+	// Update a user (Requires authentication). Apart from changing email/password,
+	// this method can be used to set custom user data. Changing the email will
+	// result in a magiclink being sent out.
+	UpdateUser(req types.UpdateUserRequest) (*types.UpdateUserResponse, error)
 }

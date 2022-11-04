@@ -37,7 +37,7 @@ Required for V1 release:
         - [X] POST /logout
         - [ ] GET /reauthenticate
         - [X] GET /user
-        - [ ] PUT /user
+        - [X] PUT /user
         - [ ] POST /factors
         - [ ] POST /factors/{factor_id}/verify
         - [ ] POST /factors/{factor_id}/challenge

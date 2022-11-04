@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -35,6 +36,45 @@ func (c *Client) GetUser() (*types.UserResponse, error) {
 	}
 
 	var res types.UserResponse
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// PUT /user
+//
+// Update a user (Requires authentication). Apart from changing email/password,
+// this method can be used to set custom user data. Changing the email will
+// result in a magiclink being sent out.
+func (c *Client) UpdateUser(req types.UpdateUserRequest) (*types.UpdateUserResponse, error) {
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := c.newRequest(userPath, http.MethodPut, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(r)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		fullBody, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
+		}
+		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
+	}
+
+	var res types.UpdateUserResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
 		return nil, err

@@ -15,6 +15,10 @@ func TestLogout(t *testing.T) {
 
 	client := autoconfirmClient
 
+	// Logout without a valid token.
+	err := client.Logout()
+	assert.Error(err)
+
 	// Create logged in user.
 	email := randomEmail()
 	password := randomString(10)
