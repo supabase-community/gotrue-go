@@ -88,6 +88,18 @@ type InviteResponse struct {
 	User
 }
 
+// DEPRECATED: Use /otp with Email and CreateUser=true instead of /magiclink.
+type MagiclinkRequest struct {
+	Email string `json:"email"`
+}
+
+type OTPRequest struct {
+	Email      string                 `json:"email"`
+	Phone      string                 `json:"phone"`
+	CreateUser bool                   `json:"create_user"`
+	Data       map[string]interface{} `json:"data"`
+}
+
 type ExternalProviders struct {
 	Apple     bool `json:"apple"`
 	Azure     bool `json:"azure"`

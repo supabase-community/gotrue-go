@@ -79,6 +79,24 @@ type Client interface {
 	// tokens will still be valid for stateless auth until they expires.
 	Logout() error
 
+	// POST /magiclink
+	//
+	// DEPRECATED: Use /otp with Email and CreateUser=true instead of /magiclink.
+	//
+	// Magic Link. Will deliver a link (e.g.
+	// /verify?type=magiclink&token=abcdefghijklmno) to the user based on email
+	// address which they can use to redeem an access_token.
+	//
+	// By default Magic Links can only be sent once every 60 seconds.
+	Magiclink(req types.MagiclinkRequest) error
+	// POST /otp
+	// One-Time-Password. Will deliver a magiclink or SMS OTP to the user depending
+	// on whether the request contains an email or phone key.
+	//
+	// If CreateUser is true, the user will be automatically signed up if the user
+	// doesn't exist.
+	OTP(req types.OTPRequest) error
+
 	// GET /settings
 	//
 	// Returns the publicly available settings for this gotrue instance.

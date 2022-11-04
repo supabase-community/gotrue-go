@@ -29,8 +29,8 @@ Required for V1 release:
         - [X] POST /invite
         - [X] POST /signup
         - [ ] POST /recover
-        - [ ] POST /magiclink
-        - [ ] POST /otp
+        - [X] POST /magiclink
+        - [X] POST /otp
         - [X] POST /token
         - [ ] GET /verify
         - [ ] POST /verify
@@ -167,3 +167,9 @@ The library is tested against a real GoTrue server running in a docker image. Th
 To run these tests, simply `make test`.
 
 To interact with docker compose, you can also use `make up` and `make down`.
+
+## Differences from gotrue-js
+
+Prior users of [`gotrue-js`](https://github.com/supabase/gotrue-js) may be familiar with its subscription mechanism and session management - in line with its ability to be used as a client-side authentication library, in addition to use on the server.
+
+As Go is typically used on the backend, this library acts purely as a convenient wrapper for interacting with a GoTrue server. It provides no session management or subscription mechanism.
