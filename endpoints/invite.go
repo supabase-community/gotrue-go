@@ -1,4 +1,4 @@
-package gotrue
+package endpoints
 
 import (
 	"bytes"
@@ -6,29 +6,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"time"
+
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 const invitePath = "/invite"
-
-type InviteRequest struct {
-	Email string `json:"email"`
-}
-
-type InviteResponse struct {
-	ID                 string    `json:"id"`
-	Email              string    `json:"email"`
-	ConfirmationSentAt time.Time `json:"confirmation_sent_at"`
-	CreatedAt          time.Time `json:"created_at"`
-	UpdatedAt          time.Time `json:"updated_at"`
-	InvitedAt          time.Time `json:"invited_at"`
-}
 
 // POST /invite
 //
 // Invites a new user with an email.
 // This endpoint requires the service_role or supabase_admin JWT set using WithToken.
-func (c *Client) Invite(req InviteRequest) (*InviteResponse, error) {
+func (c *Client) Invite(req types.InviteRequest) (*types.InviteResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -53,7 +41,7 @@ func (c *Client) Invite(req InviteRequest) (*InviteResponse, error) {
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	var res InviteResponse
+	var res types.InviteResponse
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		return nil, err
 	}

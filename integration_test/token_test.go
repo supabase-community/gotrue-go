@@ -1,4 +1,4 @@
-package gotrue_test
+package integration_test
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kwoodhouse93/gotrue-go"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 func TestToken(t *testing.T) {
@@ -17,13 +17,13 @@ func TestToken(t *testing.T) {
 	email := randomEmail()
 	password := "password"
 
-	_, err := autoconfirmClient.Signup(gotrue.SignupRequest{
+	_, err := autoconfirmClient.Signup(types.SignupRequest{
 		Email:    email,
 		Password: password,
 	})
 	require.NoError(err)
 
-	token, err := autoconfirmClient.Token(gotrue.TokenRequest{
+	token, err := autoconfirmClient.Token(types.TokenRequest{
 		GrantType: "password",
 		Email:     email,
 		Password:  password,
@@ -48,13 +48,13 @@ func TestToken(t *testing.T) {
 	phone := randomPhoneNumber()
 	password = "password"
 
-	_, err = autoconfirmClient.Signup(gotrue.SignupRequest{
+	_, err = autoconfirmClient.Signup(types.SignupRequest{
 		Phone:    phone,
 		Password: password,
 	})
 	require.NoError(err)
 
-	token, err = autoconfirmClient.Token(gotrue.TokenRequest{
+	token, err = autoconfirmClient.Token(types.TokenRequest{
 		GrantType: "password",
 		Phone:     phone,
 		Password:  password,
@@ -77,14 +77,14 @@ func TestToken(t *testing.T) {
 
 	// Test login with refresh token
 	email = randomEmail()
-	user, err := autoconfirmClient.Signup(gotrue.SignupRequest{
+	user, err := autoconfirmClient.Signup(types.SignupRequest{
 		Email:    email,
 		Password: "password",
 	})
 	require.NoError(err)
 	require.NotEmpty(user.RefreshToken)
 
-	token, err = autoconfirmClient.Token(gotrue.TokenRequest{
+	token, err = autoconfirmClient.Token(types.TokenRequest{
 		GrantType:    "refresh_token",
 		RefreshToken: user.RefreshToken,
 	})
@@ -105,7 +105,7 @@ func TestToken(t *testing.T) {
 	assert.Equal(3600, token.ExpiresIn)
 
 	// Invalid input tests
-	tests := map[string]gotrue.TokenRequest{
+	tests := map[string]types.TokenRequest{
 		"invalid_grant_type": {
 			GrantType: "invalid",
 		},

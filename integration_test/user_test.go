@@ -1,4 +1,4 @@
-package gotrue_test
+package integration_test
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kwoodhouse93/gotrue-go"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 func TestUser(t *testing.T) {
@@ -19,7 +19,7 @@ func TestUser(t *testing.T) {
 	// Create user
 	email := randomEmail()
 	password := "password"
-	session, err := client.Signup(gotrue.SignupRequest{
+	session, err := client.Signup(types.SignupRequest{
 		Email:    email,
 		Password: password,
 	})

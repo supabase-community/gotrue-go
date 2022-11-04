@@ -1,4 +1,4 @@
-package gotrue_test
+package integration_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kwoodhouse93/gotrue-go"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 func TestAdminCreateUser(t *testing.T) {
@@ -18,7 +18,7 @@ func TestAdminCreateUser(t *testing.T) {
 
 	pass := "password"
 	email := randomEmail()
-	req := gotrue.AdminCreateUserRequest{
+	req := types.AdminCreateUserRequest{
 		Email:    email,
 		Role:     "admin",
 		Password: &pass,
@@ -39,7 +39,7 @@ func TestAdminListUsers(t *testing.T) {
 	// Create a user that we know should be returned
 	pass := "password"
 	email := randomEmail()
-	req := gotrue.AdminCreateUserRequest{
+	req := types.AdminCreateUserRequest{
 		Email:    email,
 		Role:     "test",
 		Password: &pass,

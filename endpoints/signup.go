@@ -1,4 +1,4 @@
-package gotrue
+package endpoints
 
 import (
 	"bytes"
@@ -14,25 +14,10 @@ import (
 
 const signupPath = "/signup"
 
-type SignupRequest struct {
-	Email    string                 `json:"email"`
-	Phone    string                 `json:"phone"`
-	Password string                 `json:"password"`
-	Data     map[string]interface{} `json:"data"`
-}
-
-type SignupResponse struct {
-	// Response if autoconfirm is off
-	types.User
-
-	// Response if autoconfirm is on
-	types.Session
-}
-
 // POST /signup
 //
 // Register a new user with an email and password.
-func (c *Client) Signup(req SignupRequest) (*SignupResponse, error) {
+func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -57,7 +42,7 @@ func (c *Client) Signup(req SignupRequest) (*SignupResponse, error) {
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	var res SignupResponse
+	var res types.SignupResponse
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		return nil, err
 	}

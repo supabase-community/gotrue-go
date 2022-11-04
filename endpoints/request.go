@@ -1,4 +1,4 @@
-package gotrue
+package endpoints
 
 import (
 	"io"

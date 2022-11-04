@@ -1,9 +1,8 @@
-package gotrue
+package endpoints
 
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,31 +12,11 @@ import (
 
 const tokenPath = "/token"
 
-var ErrInvalidTokenRequest = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
-
-type TokenRequest struct {
-	GrantType string `json:"-"`
-
-	// Email or Phone, and Password, are required if GrantType is 'password'.
-	// They must not be provided if GrantType is 'refresh_token'.
-	Email    string `json:"email,omitempty"`
-	Phone    string `json:"phone,omitempty"`
-	Password string `json:"password,omitempty"`
-
-	// RefreshToken is required if GrantType is 'refresh_token'.
-	// It must not be provided if GrantType is 'password'.
-	RefreshToken string `json:"refresh_token,omitempty"`
-}
-
-type TokenResponse struct {
-	types.Session
-}
-
 // Sign in with email and password
 //
 // This is a convenience method that calls Token with the password grant type
-func (c *Client) SignInWithEmailPassword(email, password string) (*TokenResponse, error) {
-	return c.Token(TokenRequest{
+func (c *Client) SignInWithEmailPassword(email, password string) (*types.TokenResponse, error) {
+	return c.Token(types.TokenRequest{
 		GrantType: "password",
 		Email:     email,
 		Password:  password,
@@ -47,8 +26,8 @@ func (c *Client) SignInWithEmailPassword(email, password string) (*TokenResponse
 // Sign in with phone and password
 //
 // This is a convenience method that calls Token with the password grant type
-func (c *Client) SignInWithPhonePassword(phone, password string) (*TokenResponse, error) {
-	return c.Token(TokenRequest{
+func (c *Client) SignInWithPhonePassword(phone, password string) (*types.TokenResponse, error) {
+	return c.Token(types.TokenRequest{
 		GrantType: "password",
 		Phone:     phone,
 		Password:  password,
@@ -58,8 +37,8 @@ func (c *Client) SignInWithPhonePassword(phone, password string) (*TokenResponse
 // Sign in with refresh token
 //
 // This is a convenience method that calls Token with the refresh_token grant type
-func (c *Client) RefreshToken(refreshToken string) (*TokenResponse, error) {
-	return c.Token(TokenRequest{
+func (c *Client) RefreshToken(refreshToken string) (*types.TokenResponse, error) {
+	return c.Token(types.TokenRequest{
 		GrantType:    "refresh_token",
 		RefreshToken: refreshToken,
 	})
@@ -69,18 +48,18 @@ func (c *Client) RefreshToken(refreshToken string) (*TokenResponse, error) {
 //
 // This is an OAuth2 endpoint that currently implements the password and
 // refresh_token grant types
-func (c *Client) Token(req TokenRequest) (*TokenResponse, error) {
+func (c *Client) Token(req types.TokenRequest) (*types.TokenResponse, error) {
 	switch req.GrantType {
 	case "password":
 		if (req.Email == "" && req.Phone == "") || req.Password == "" || req.RefreshToken != "" {
-			return nil, ErrInvalidTokenRequest
+			return nil, types.ErrInvalidTokenRequest
 		}
 	case "refresh_token":
 		if req.RefreshToken == "" || req.Email != "" || req.Phone != "" || req.Password != "" {
-			return nil, ErrInvalidTokenRequest
+			return nil, types.ErrInvalidTokenRequest
 		}
 	default:
-		return nil, ErrInvalidTokenRequest
+		return nil, types.ErrInvalidTokenRequest
 	}
 
 	body, err := json.Marshal(req)
@@ -106,7 +85,7 @@ func (c *Client) Token(req TokenRequest) (*TokenResponse, error) {
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	var res TokenResponse
+	var res types.TokenResponse
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		return nil, err
 	}

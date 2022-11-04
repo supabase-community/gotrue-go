@@ -80,7 +80,7 @@ services:
 
   postgres:
     build:
-      context: ./testing
+      context: ./
       dockerfile: Dockerfile.postgres.dev
     container_name: gotrue_postgres
     ports:

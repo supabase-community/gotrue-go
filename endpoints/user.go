@@ -1,25 +1,21 @@
-package gotrue
+package endpoints
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
-var healthPath = "/health"
+var userPath = "/user"
 
-type HealthCheckResponse struct {
-	Version     string `json:"version"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
-// GET /health
+// GET /user
 //
-// Check the health of the GoTrue server
-func (c *Client) HealthCheck() (*HealthCheckResponse, error) {
-	r, err := c.newRequest(healthPath, http.MethodGet, nil)
+// Get the JSON object for the logged in user (requires authentication)
+func (c *Client) GetUser() (*types.UserResponse, error) {
+	r, err := c.newRequest(userPath, http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +34,7 @@ func (c *Client) HealthCheck() (*HealthCheckResponse, error) {
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	var res HealthCheckResponse
+	var res types.UserResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
 		return nil, err

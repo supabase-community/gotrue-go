@@ -1,4 +1,4 @@
-package gotrue_test
+package integration_test
 
 import (
 	"regexp"
@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kwoodhouse93/gotrue-go"
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 func TestAdminGenerateLink(t *testing.T) {
@@ -20,7 +20,7 @@ func TestAdminGenerateLink(t *testing.T) {
 
 	// Testing signup link
 	email := randomEmail()
-	resp, err := admin.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
+	resp, err := admin.AdminGenerateLink(types.AdminGenerateLinkRequest{
 		Type:       "signup",
 		Email:      email,
 		Password:   "password",
@@ -44,7 +44,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	assert.InDelta(time.Now().Unix(), resp.UpdatedAt.Unix(), float64(time.Second))
 
 	// Testing invalid requests
-	tests := map[string]gotrue.AdminGenerateLinkRequest{
+	tests := map[string]types.AdminGenerateLinkRequest{
 		"signup/missing_email": {
 			Type:     "signup",
 			Password: "password",
@@ -139,7 +139,7 @@ func TestAdminGenerateLink(t *testing.T) {
 
 	// Testing email change links
 	newEmail := randomEmail()
-	resp, err = admin.AdminGenerateLink(gotrue.AdminGenerateLinkRequest{
+	resp, err = admin.AdminGenerateLink(types.AdminGenerateLinkRequest{
 		Type:       "email_change_current",
 		Email:      email,
 		NewEmail:   newEmail,

@@ -1,4 +1,4 @@
-package gotrue_test
+package integration_test
 
 import (
 	"fmt"
@@ -22,9 +22,9 @@ const (
 
 var (
 	// Global clients are used for all tests in this package.
-	client               *gotrue.Client
-	autoconfirmClient    *gotrue.Client
-	signupDisabledClient *gotrue.Client
+	client               gotrue.Client
+	autoconfirmClient    gotrue.Client
+	signupDisabledClient gotrue.Client
 
 	// Used to validate UUIDs.
 	uuidRegex = regexp.MustCompile(`^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$`)
@@ -71,7 +71,7 @@ func adminToken() string {
 	return token
 }
 
-func withAdmin(c *gotrue.Client) *gotrue.Client {
+func withAdmin(c gotrue.Client) gotrue.Client {
 	return c.WithToken(adminToken())
 }
 
