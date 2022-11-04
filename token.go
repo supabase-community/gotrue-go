@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
 const tokenPath = "/token"
@@ -28,10 +30,7 @@ type TokenRequest struct {
 }
 
 type TokenResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	TokenType    string `json:"token_type"`
-	ExpiresIn    int    `json:"expires_in"`
+	types.Session
 }
 
 // Sign in with email and password
@@ -56,6 +55,16 @@ func (c *Client) SignInWithPhonePassword(phone, password string) (*TokenResponse
 	})
 }
 
+// Sign in with refresh token
+//
+// This is a convenience method that calls Token with the refresh_token grant type
+func (c *Client) RefreshToken(refreshToken string) (*TokenResponse, error) {
+	return c.Token(TokenRequest{
+		GrantType:    "refresh_token",
+		RefreshToken: refreshToken,
+	})
+}
+
 // POST /token
 //
 // This is an OAuth2 endpoint that currently implements the password and
@@ -67,7 +76,7 @@ func (c *Client) Token(req TokenRequest) (*TokenResponse, error) {
 			return nil, ErrInvalidTokenRequest
 		}
 	case "refresh_token":
-		if req.RefreshToken == "" || req.Email != "" || req.Password != "" {
+		if req.RefreshToken == "" || req.Email != "" || req.Phone != "" || req.Password != "" {
 			return nil, ErrInvalidTokenRequest
 		}
 	default:

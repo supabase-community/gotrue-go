@@ -20,7 +20,15 @@ type SignupRequest struct {
 }
 
 type SignupResponse struct {
+	// Response if autoconfirm is off
 	types.User
+
+	// Response if autoconfirm is on
+	AccessToken  string     `json:"access_token"`
+	RefreshToken string     `json:"refresh_token"`
+	TokenType    string     `json:"token_type"`
+	ExpiresIn    int        `json:"expires_in"`
+	SessionUser  types.User `json:"user"`
 }
 
 // POST /signup

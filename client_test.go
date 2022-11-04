@@ -53,7 +53,7 @@ func randomNumberString(n int) string {
 }
 
 func randomPhoneNumber() string {
-	return fmt.Sprintf("+1%s", randomNumberString(10))
+	return fmt.Sprintf("1%s", randomNumberString(10))
 }
 
 func adminToken() string {
