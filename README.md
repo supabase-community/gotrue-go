@@ -32,8 +32,8 @@ Required for V1 release:
         - [X] POST /magiclink
         - [X] POST /otp
         - [X] POST /token
-        - [ ] GET /verify
-        - [ ] POST /verify
+        - [X] GET /verify
+        - [X] POST /verify
         - [X] POST /logout
         - [X] GET /reauthenticate
         - [X] GET /user

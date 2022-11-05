@@ -19,7 +19,10 @@ func (e *ErrInvalidGenerateLinkRequest) Error() string {
 	return fmt.Sprintf("generate link request is invalid - %s", e.message)
 }
 
-var ErrInvalidTokenRequest = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
+var (
+	ErrInvalidTokenRequest  = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
+	ErrInvalidVerifyRequest = errors.New("verify request is invalid - type, token and redirect_to must be provided, and email or phone must be provided to VerifyForUser")
+)
 
 // --- Request/Response Types ---
 
@@ -231,17 +234,35 @@ const (
 )
 
 type VerifyRequest struct {
-	Type       VerificationType `json:"type"`
-	Token      string           `json:"token"`
-	Email      string           `json:"email"`
-	Phone      string           `json:"phone"`
-	RedirectTo string           `json:"redirect_to"`
+	Type       VerificationType
+	Token      string
+	RedirectTo string
 }
 
 type VerifyResponse struct {
 	URL string
 
+	// The fields below are returned only for a successful response.
+	AccessToken  string
+	TokenType    string
+	ExpiresIn    int
+	RefreshToken string
+	Type         VerificationType
+
+	// The fields below are returned if there was an error verifying.
 	Error            string
 	ErrorCode        string
 	ErrorDescription string
+}
+
+type VerifyForUserRequest struct {
+	Type       VerificationType `json:"type"`
+	Token      string           `json:"token"`
+	RedirectTo string           `json:"redirect_to"`
+	Email      string           `json:"email"`
+	Phone      string           `json:"phone"`
+}
+
+type VerifyForUserResponse struct {
+	Session
 }

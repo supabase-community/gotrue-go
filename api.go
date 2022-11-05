@@ -174,12 +174,28 @@ type Client interface {
 	// result in a magiclink being sent out.
 	UpdateUser(req types.UpdateUserRequest) (*types.UpdateUserResponse, error)
 
+	// GET /verify
+	//
+	// Verify a registration or a password recovery. Type can be signup or recovery
+	// or magiclink or invite and the token is a token returned from either /signup
+	// or /recover or /magiclink.
+	//
+	// The server returns a redirect response. This method will not follow the
+	// redirect, but instead returns the URL the client was told to redirect to,
+	// as well as parsing the parameters from the URL fragment.
+	//
+	// NOTE: This endpoint may return a nil error, but the Response can contain
+	// error details extracted from the returned URL. Please check that the Error,
+	// ErrorCode and/or ErrorDescription fields of the response are empty.
+	Verify(req types.VerifyRequest) (*types.VerifyResponse, error)
 	// POST /verify
 	//
 	// Verify a registration or a password recovery. Type can be signup or recovery
 	// or magiclink or invite and the token is a token returned from either /signup
 	// or /recover or /magiclink.
 	//
-	// GET /verify also exists, but cannot take email or phone parameters.
-	Verify(req types.VerifyRequest) (*types.VerifyResponse, error)
+	// This differs from GET /verify as it requires an email or phone to be given,
+	// which is used to verify the token associated to the user. It also returns a
+	// JSON response rather than a redirect.
+	VerifyForUser(req types.VerifyForUserRequest) (*types.VerifyForUserResponse, error)
 }
