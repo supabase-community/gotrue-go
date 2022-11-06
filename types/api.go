@@ -170,6 +170,11 @@ type AdminUpdateUserFactorResponse struct {
 	Factor
 }
 
+type AdminDeleteUserFactorRequest struct {
+	UserID   uuid.UUID
+	FactorID uuid.UUID
+}
+
 type Provider string
 
 const (

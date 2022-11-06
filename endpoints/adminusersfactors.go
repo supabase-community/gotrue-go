@@ -88,3 +88,31 @@ func (c *Client) AdminUpdateUserFactor(req types.AdminUpdateUserFactorRequest) (
 
 	return &res, nil
 }
+
+// DELETE /admin/users/{user_id}/factors/{factor_id}
+//
+// Delete a factor for a user.
+func (c *Client) AdminDeleteUserFactor(req types.AdminDeleteUserFactorRequest) error {
+	path := fmt.Sprintf("%s/%s/factors/%s", adminUsersPath, req.UserID, req.FactorID)
+
+	r, err := c.newRequest(path, http.MethodDelete, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := c.client.Do(r)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		fullBody, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("response status code %d", resp.StatusCode)
+		}
+		return fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
+	}
+
+	return nil
+}

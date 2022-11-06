@@ -100,6 +100,10 @@ type Client interface {
 	//
 	// Update a factor for a user.
 	AdminUpdateUserFactor(req types.AdminUpdateUserFactorRequest) (*types.AdminUpdateUserFactorResponse, error)
+	// DELETE /admin/users/{user_id}/factors/{factor_id}
+	//
+	// Delete a factor for a user.
+	AdminDeleteUserFactor(req types.AdminDeleteUserFactorRequest) error
 
 	// GET /authorize
 	//

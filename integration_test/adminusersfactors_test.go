@@ -118,3 +118,25 @@ func TestUpdateUserFactor(t *testing.T) {
 	})
 	assert.Error(err)
 }
+
+func TestDeleteUserFactor(t *testing.T) {
+	assert := assert.New(t)
+
+	// Need admin credential
+	err := client.AdminDeleteUserFactor(types.AdminDeleteUserFactorRequest{
+		UserID:   uuid.New(),
+		FactorID: uuid.New(),
+	})
+	assert.Error(err)
+
+	admin := withAdmin(client)
+
+	// Cannot delete a factor for user that doesn't exist
+	err = admin.AdminDeleteUserFactor(types.AdminDeleteUserFactorRequest{
+		UserID:   uuid.New(),
+		FactorID: uuid.New(),
+	})
+	assert.Error(err)
+
+	// Cannot test successfully deleting a factor, as we cannot create a verified factor to delete
+}
