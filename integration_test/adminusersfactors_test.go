@@ -37,7 +37,7 @@ func TestAdminListUserFactors(t *testing.T) {
 	require.NoError(err)
 	require.Regexp(uuidRegex, session.User.ID)
 
-	// Get that user
+	// Get that user's factors
 	resp, err := admin.AdminListUserFactors(types.AdminListUserFactorsRequest{
 		UserID: session.User.ID,
 	})
@@ -54,12 +54,67 @@ func TestAdminListUserFactors(t *testing.T) {
 	assert.Equal(types.FactorTypeTOTP, enrollResp.Type)
 	assert.NotEqual(uuid.Nil, enrollResp.ID)
 
-	// Get that user again
-	// Get that user
+	// Get that user's factors again
 	resp, err = admin.AdminListUserFactors(types.AdminListUserFactorsRequest{
 		UserID: session.User.ID,
 	})
 	require.NoError(err)
 	require.Len(resp.Factors, 1)
 	assert.Equal(resp.Factors[0].ID, enrollResp.ID)
+}
+
+func TestUpdateUserFactor(t *testing.T) {
+	assert := assert.New(t)
+	require := require.New(t)
+
+	// Need admin credential
+	_, err := client.AdminUpdateUserFactor(types.AdminUpdateUserFactorRequest{
+		UserID: uuid.Nil,
+	})
+	assert.Error(err)
+
+	admin := withAdmin(client)
+
+	// Cannot update a factor for user that doesn't exist
+	_, err = admin.AdminUpdateUserFactor(types.AdminUpdateUserFactorRequest{
+		UserID:   uuid.New(),
+		FactorID: uuid.New(),
+	})
+	assert.Error(err)
+
+	// Create a user
+	email := randomEmail()
+	session, err := autoconfirmClient.Signup(types.SignupRequest{
+		Email:    email,
+		Password: "password",
+	})
+	require.NoError(err)
+	require.Regexp(uuidRegex, session.User.ID)
+
+	// Enroll factor
+	enrollResp, err := autoconfirmClient.WithToken(session.AccessToken).EnrollFactor(types.EnrollFactorRequest{
+		FactorType:   types.FactorTypeTOTP,
+		FriendlyName: "Test Factor",
+		Issuer:       "example.com",
+	})
+	require.NoError(err)
+	assert.Equal(types.FactorTypeTOTP, enrollResp.Type)
+	assert.NotEqual(uuid.Nil, enrollResp.ID)
+
+	// Update factor
+	updateResp, err := admin.AdminUpdateUserFactor(types.AdminUpdateUserFactorRequest{
+		UserID:   session.User.ID,
+		FactorID: enrollResp.ID,
+
+		FriendlyName: "Updated Factor",
+	})
+	require.NoError(err)
+	assert.Equal("Updated Factor", updateResp.FriendlyName)
+
+	// Invalid request - nothing to update
+	_, err = admin.AdminUpdateUserFactor(types.AdminUpdateUserFactorRequest{
+		UserID:   session.User.ID,
+		FactorID: enrollResp.ID,
+	})
+	assert.Error(err)
 }

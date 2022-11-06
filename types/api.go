@@ -23,9 +23,10 @@ func (e *ErrInvalidGenerateLinkRequest) Error() string {
 }
 
 var (
-	ErrInvalidAdminAuditRequest = errors.New("admin audit request is invalid - if Query is not nil, then query Column must be author, action or type, and value must be given")
-	ErrInvalidTokenRequest      = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
-	ErrInvalidVerifyRequest     = errors.New("verify request is invalid - type, token and redirect_to must be provided, and email or phone must be provided to VerifyForUser")
+	ErrInvalidAdminAuditRequest        = errors.New("admin audit request is invalid - if Query is not nil, then query Column must be author, action or type, and value must be given")
+	ErrInvalidAdminUpdateFactorRequest = errors.New("admin update factor request is invalid - nothing to update")
+	ErrInvalidTokenRequest             = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
+	ErrInvalidVerifyRequest            = errors.New("verify request is invalid - type, token and redirect_to must be provided, and email or phone must be provided to VerifyForUser")
 )
 
 // --- Request/Response Types ---
@@ -156,6 +157,17 @@ type AdminListUserFactorsRequest struct {
 
 type AdminListUserFactorsResponse struct {
 	Factors []Factor
+}
+
+type AdminUpdateUserFactorRequest struct {
+	UserID   uuid.UUID `json:"-"`
+	FactorID uuid.UUID `json:"-"`
+
+	FriendlyName string `json:"friendly_name,omitempty"`
+}
+
+type AdminUpdateUserFactorResponse struct {
+	Factor
 }
 
 type Provider string

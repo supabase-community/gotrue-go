@@ -52,7 +52,7 @@ Required for V1 release:
         - [X] POST /admin/users
         - [X] GET /admin/users/{user_id}/factors
         - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}
-        - [ ] PUT /admin/users/{user_id}/factors/{factor_id}
+        - [X] PUT /admin/users/{user_id}/factors/{factor_id}
         - [X] GET /admin/users/{user_id}
         - [X] PUT /admin/users/{user_id}
         - [X] DELETE /admin/users/{user_id}
@@ -67,7 +67,6 @@ Required for V1 release:
     - [X] GoTrue container - signup enabled, autoconfirm off
     - [X] GoTrue container - signup enabled, autoconfirm on
     - [X] GoTrue container - signup disabled
-    - [ ] Mail server
 - [ ] Support for Captcha tokens
 
 ## Quick start

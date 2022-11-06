@@ -96,6 +96,10 @@ type Client interface {
 	//
 	// Get a list of factors for a user.
 	AdminListUserFactors(req types.AdminListUserFactorsRequest) (*types.AdminListUserFactorsResponse, error)
+	// PUT /admin/users/{user_id}/factors/{factor_id}
+	//
+	// Update a factor for a user.
+	AdminUpdateUserFactor(req types.AdminUpdateUserFactorRequest) (*types.AdminUpdateUserFactorResponse, error)
 
 	// GET /authorize
 	//
