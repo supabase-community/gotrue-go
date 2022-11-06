@@ -9,6 +9,11 @@ import (
 	"github.com/kwoodhouse93/gotrue-go/types"
 )
 
+// These test struggle to really exercise a full verification flow - getting
+// the server to a state where a user has authorized and can verify the token
+// is difficult to do without involving an actual 3rd party OAuth implementation.
+// Therefore, these tests only check that a response is received in an error
+// case.
 func TestVerify(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)

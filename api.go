@@ -75,6 +75,23 @@ type Client interface {
 	// redirect to.
 	Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse, error)
 
+	// POST /factors
+	//
+	// Enroll a new factor.
+	EnrollFactor(req types.EnrollFactorRequest) (*types.EnrollFactorResponse, error)
+	// POST /factors/{factor_id}/challenge
+	//
+	// Challenge a factor.
+	ChallengeFactor(req types.ChallengeFactorRequest) (*types.ChallengeFactorResponse, error)
+	// POST /factors/{factor_id}/verify
+	//
+	// Verify the challenge for an enrolled factor.
+	VerifyFactor(req types.VerifyFactorRequest) (*types.VerifyFactorResponse, error)
+	// DELETE /factors/{factor_id}
+	//
+	// Unenroll an enrolled factor.
+	UnenrollFactor(req types.UnenrollFactorRequest) (*types.UnenrollFactorResponse, error)
+
 	// GET/POST /callback
 	//
 	// Callback endpoint for external oauth providers to redirect to.

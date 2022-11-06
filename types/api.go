@@ -3,6 +3,9 @@ package types
 import (
 	"errors"
 	"fmt"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 // --- Errors ---
@@ -105,6 +108,56 @@ type AuthorizeRequest struct {
 
 type AuthorizeResponse struct {
 	AuthorizationURL string
+}
+
+type FactorType string
+
+const FactorTypeTOTP FactorType = "totp"
+
+type EnrollFactorRequest struct {
+	FriendlyName string     `json:"friendly_name"`
+	FactorType   FactorType `json:"factor_type"`
+	Issuer       string     `json:"issuer"`
+}
+
+type TOTPObject struct {
+	QRCode string `json:"qr_code"`
+	Secret string `json:"secret"`
+	URI    string `json:"uri"`
+}
+
+type EnrollFactorResponse struct {
+	ID   uuid.UUID  `json:"id"`
+	Type FactorType `json:"type"`
+	TOTP TOTPObject `json:"totp,omitempty"`
+}
+
+type ChallengeFactorRequest struct {
+	FactorID uuid.UUID `json:"factor_id"`
+}
+
+type ChallengeFactorResponse struct {
+	ID        uuid.UUID `json:"id"`
+	ExpiresAt time.Time `json:"expires_at"`
+}
+
+type VerifyFactorRequest struct {
+	FactorID uuid.UUID
+
+	ChallengeID uuid.UUID `json:"challenge_id"`
+	Code        string    `json:"code"`
+}
+
+type VerifyFactorResponse struct {
+	Session
+}
+
+type UnenrollFactorRequest struct {
+	FactorID uuid.UUID
+}
+
+type UnenrollFactorResponse struct {
+	ID uuid.UUID `json:"id"`
 }
 
 type HealthCheckResponse struct {

@@ -38,10 +38,10 @@ Required for V1 release:
         - [X] GET /reauthenticate
         - [X] GET /user
         - [X] PUT /user
-        - [ ] POST /factors
-        - [ ] POST /factors/{factor_id}/verify
-        - [ ] POST /factors/{factor_id}/challenge
-        - [ ] DELETE /factors/{factor_id}
+        - [X] POST /factors
+        - [X] POST /factors/{factor_id}/verify
+        - [X] POST /factors/{factor_id}/challenge
+        - [X] DELETE /factors/{factor_id}
         - [ ] GET /sso/saml/metadata
         - [ ] POST /sso/saml/acs
     - Admin API
