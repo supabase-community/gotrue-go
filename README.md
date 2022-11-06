@@ -42,8 +42,8 @@ Required for V1 release:
         - [X] POST /factors/{factor_id}/verify
         - [X] POST /factors/{factor_id}/challenge
         - [X] DELETE /factors/{factor_id}
-        - [ ] GET /sso/saml/metadata
-        - [ ] POST /sso/saml/acs
+        - [X] GET /sso/saml/metadata (not tested)
+        - [X] POST /sso/saml/acs (not tested)
     - Admin API
         - [ ] GET /admin/audit
         - [X] GET /admin/users
