@@ -50,7 +50,7 @@ Required for V1 release:
         - [X] GET /admin/audit
         - [X] GET /admin/users
         - [X] POST /admin/users
-        - [ ] GET /admin/users/{user_id}/factors
+        - [X] GET /admin/users/{user_id}/factors
         - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}
         - [ ] PUT /admin/users/{user_id}/factors/{factor_id}
         - [X] GET /admin/users/{user_id}

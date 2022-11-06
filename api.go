@@ -56,6 +56,7 @@ type Client interface {
 	// will include the total number of results, as well as the total number of pages
 	// and, if not already on the last page, the next page number.
 	AdminAudit(req types.AdminAuditRequest) (*types.AdminAuditResponse, error)
+
 	// POST /admin/generate_link
 	//
 	// Returns the corresponding email action link based on the type specified.
@@ -65,6 +66,7 @@ type Client interface {
 	//
 	// Requires admin token.
 	AdminGenerateLink(req types.AdminGenerateLinkRequest) (*types.AdminGenerateLinkResponse, error)
+
 	// POST /admin/users
 	//
 	// Creates the user based on the user_id specified.
@@ -89,6 +91,11 @@ type Client interface {
 	//
 	// Delete a user by their user_id.
 	AdminDeleteUser(req types.AdminDeleteUserRequest) error
+
+	// GET /admin/users/{user_id}/factors
+	//
+	// Get a list of factors for a user.
+	AdminListUserFactors(req types.AdminListUserFactorsRequest) (*types.AdminListUserFactorsResponse, error)
 
 	// GET /authorize
 	//

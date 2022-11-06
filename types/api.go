@@ -150,6 +150,14 @@ type AdminDeleteUserRequest struct {
 	UserID uuid.UUID
 }
 
+type AdminListUserFactorsRequest struct {
+	UserID uuid.UUID
+}
+
+type AdminListUserFactorsResponse struct {
+	Factors []Factor
+}
+
 type Provider string
 
 const (
