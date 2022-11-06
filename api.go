@@ -11,6 +11,9 @@ import (
 // Some methods require bearer token authentication. To set the bearer token,
 // use the WithToken(token) method.
 type Client interface {
+
+	// Options:
+
 	// By default, the client will use the supabase project reference and assume
 	// you are connecting to the GoTrue server as part of a supabase project.
 	// To connect to a GoTrue server hosted elsewhere, you can specify a custom
@@ -41,6 +44,18 @@ type Client interface {
 
 	// Endpoints:
 
+	// GET /admin/audit
+	//
+	// Get audit logs.
+	//
+	// May optionally specify a query to use for filtering the audit logs. The
+	// column and value must be specified if using a query.
+	//
+	// The result may also be paginated. By default, 50 results will be returned
+	// per request. This can be configured with PerPage in the request. The response
+	// will include the total number of results, as well as the current page number
+	// and the number of results per page.
+	AdminAudit(req types.AdminAuditRequest) (*types.AdminAuditResponse, error)
 	// POST /admin/generate_link
 	//
 	// Returns the corresponding email action link based on the type specified.

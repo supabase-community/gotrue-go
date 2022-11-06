@@ -7,6 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/google/uuid v1.3.0
 	github.com/stretchr/testify v1.8.1
+	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
 )
 
 require (

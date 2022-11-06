@@ -18,6 +18,8 @@ For more information about the Supabase fork of GoTrue, [check out the project h
 
 This library is a pre-release work in progress. It has not been thoroughly tested, and the API may be subject to breaking changes, and so it should not be used in production.
 
+The endpoints for SSO SAML are not tested and `POST /sso/saml/acs` does not provide request and response types. If you need additional support for SSO SAML, please create an issue or a pull request.
+
 Required for V1 release:
 - Implement and test endpoints
     - Client API
@@ -45,7 +47,7 @@ Required for V1 release:
         - [X] GET /sso/saml/metadata (not tested)
         - [X] POST /sso/saml/acs (not tested)
     - Admin API
-        - [ ] GET /admin/audit
+        - [X] GET /admin/audit
         - [X] GET /admin/users
         - [X] POST /admin/users
         - [ ] GET /admin/users/{user_id}/factors

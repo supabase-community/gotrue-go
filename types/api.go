@@ -23,11 +23,50 @@ func (e *ErrInvalidGenerateLinkRequest) Error() string {
 }
 
 var (
-	ErrInvalidTokenRequest  = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
-	ErrInvalidVerifyRequest = errors.New("verify request is invalid - type, token and redirect_to must be provided, and email or phone must be provided to VerifyForUser")
+	ErrInvalidAdminAuditRequest = errors.New("admin audit request is invalid - if Query is not nil, then query Column must be author, action or type, and value must be given")
+	ErrInvalidTokenRequest      = errors.New("token request is invalid - grant_type must be password or refresh_token, email and password must be provided for grant_type=password, refresh_token must be provided for grant_type=refresh_token")
+	ErrInvalidVerifyRequest     = errors.New("verify request is invalid - type, token and redirect_to must be provided, and email or phone must be provided to VerifyForUser")
 )
 
 // --- Request/Response Types ---
+type AuditQueryColumn string
+
+const (
+	AuditQueryColumnAuthor AuditQueryColumn = "author"
+	AuditQueryColumnAction AuditQueryColumn = "action"
+	AuditQueryColumnType   AuditQueryColumn = "type"
+)
+
+type AuditQuery struct {
+	Column AuditQueryColumn
+	Value  string
+}
+
+type AdminAuditRequest struct {
+	// Query, if provided, is used to search the audit log.
+	// Logs will be returned where the chosen column matches the value.
+	Query *AuditQuery
+
+	// Pagination
+	Page    uint
+	PerPage uint
+}
+
+type AuditLogEntry struct {
+	ID        uuid.UUID              `json:"id" db:"id"`
+	Payload   map[string]interface{} `json:"payload" db:"payload"`
+	CreatedAt time.Time              `json:"created_at" db:"created_at"`
+	IPAddress string                 `json:"ip_address" db:"ip_address"`
+}
+
+type AdminAuditResponse struct {
+	Logs []AuditLogEntry
+
+	// Pagination
+	TotalCount int
+	TotalPages uint
+	NextPage   uint
+}
 
 type LinkType string
 
