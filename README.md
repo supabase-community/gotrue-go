@@ -53,7 +53,7 @@ Required for V1 release:
         - [ ] GET /admin/users/{user_id}/factors
         - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}
         - [ ] PUT /admin/users/{user_id}/factors/{factor_id}
-        - [ ] GET /admin/users/{user_id}
+        - [X] GET /admin/users/{user_id}
         - [ ] PUT /admin/users/{user_id}
         - [ ] DELETE /admin/users/{user_id}
         - [X] POST /admin/generate_link

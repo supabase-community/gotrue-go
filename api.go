@@ -53,8 +53,8 @@ type Client interface {
 	//
 	// The result may also be paginated. By default, 50 results will be returned
 	// per request. This can be configured with PerPage in the request. The response
-	// will include the total number of results, as well as the current page number
-	// and the number of results per page.
+	// will include the total number of results, as well as the total number of pages
+	// and, if not already on the last page, the next page number.
 	AdminAudit(req types.AdminAuditRequest) (*types.AdminAuditResponse, error)
 	// POST /admin/generate_link
 	//
@@ -77,6 +77,10 @@ type Client interface {
 	//
 	// Requires admin token.
 	AdminListUsers() (*types.AdminListUsersResponse, error)
+	// GET /admin/users/{user_id}
+	//
+	// Get a user by their user_id.
+	AdminGetUser(req types.AdminGetUserRequest) (*types.AdminGetUserResponse, error)
 
 	// GET /authorize
 	//

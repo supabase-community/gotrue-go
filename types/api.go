@@ -118,6 +118,14 @@ type AdminListUsersResponse struct {
 	Users []User `json:"users"`
 }
 
+type AdminGetUserRequest struct {
+	UserID uuid.UUID
+}
+
+type AdminGetUserResponse struct {
+	User
+}
+
 type Provider string
 
 const (
