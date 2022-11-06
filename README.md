@@ -54,8 +54,8 @@ Required for V1 release:
         - [ ] DELETE /admin/users/{user_id}/factors/{factor_id}
         - [ ] PUT /admin/users/{user_id}/factors/{factor_id}
         - [X] GET /admin/users/{user_id}
-        - [ ] PUT /admin/users/{user_id}
-        - [ ] DELETE /admin/users/{user_id}
+        - [X] PUT /admin/users/{user_id}
+        - [X] DELETE /admin/users/{user_id}
         - [X] POST /admin/generate_link
         - [ ] GET /admin/sso/providers
         - [ ] POST /admin/sso/providers

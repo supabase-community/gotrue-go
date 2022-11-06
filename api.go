@@ -81,6 +81,14 @@ type Client interface {
 	//
 	// Get a user by their user_id.
 	AdminGetUser(req types.AdminGetUserRequest) (*types.AdminGetUserResponse, error)
+	// PUT /admin/users/{user_id}
+	//
+	// Update a user by their user_id.
+	AdminUpdateUser(req types.AdminUpdateUserRequest) (*types.AdminUpdateUserResponse, error)
+	// DELETE /admin/users/{user_id}
+	//
+	// Delete a user by their user_id.
+	AdminDeleteUser(req types.AdminDeleteUserRequest) error
 
 	// GET /authorize
 	//

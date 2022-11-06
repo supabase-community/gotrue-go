@@ -99,15 +99,16 @@ type AdminGenerateLinkResponse struct {
 }
 
 type AdminCreateUserRequest struct {
-	Aud          string                 `json:"aud"`
-	Role         string                 `json:"role"`
-	Email        string                 `json:"email"`
-	Phone        string                 `json:"phone"`
-	Password     *string                `json:"password"` // Only if type = signup
-	EmailConfirm bool                   `json:"email_confirm"`
-	PhoneConfirm bool                   `json:"phone_confirm"`
-	UserMetadata map[string]interface{} `json:"user_metadata"`
-	AppMetadata  map[string]interface{} `json:"app_metadata"`
+	Aud          string                 `json:"aud,omitempty"`
+	Role         string                 `json:"role,omitempty"`
+	Email        string                 `json:"email,omitempty"`
+	Phone        string                 `json:"phone,omitempty"`
+	Password     *string                `json:"password,omitempty"` // Only if type = signup
+	EmailConfirm bool                   `json:"email_confirm,omitempty"`
+	PhoneConfirm bool                   `json:"phone_confirm,omitempty"`
+	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
+	AppMetadata  map[string]interface{} `json:"app_metadata,omitempty"`
+	BanDuration  time.Duration          `json:"ban_duration,omitempty"` // Cannot be "none" when creating a user, so just set it or leave it empty
 }
 
 type AdminCreateUserResponse struct {
@@ -124,6 +125,29 @@ type AdminGetUserRequest struct {
 
 type AdminGetUserResponse struct {
 	User
+}
+
+type AdminUpdateUserRequest struct {
+	UserID uuid.UUID `json:"-"`
+
+	Aud          string                 `json:"aud,omitempty"`
+	Role         string                 `json:"role,omitempty"`
+	Email        string                 `json:"email,omitempty"`
+	Phone        string                 `json:"phone,omitempty"`
+	Password     string                 `json:"password,omitempty"`
+	EmailConfirm bool                   `json:"email_confirm,omitempty"`
+	PhoneConfirm bool                   `json:"phone_confirm,omitempty"`
+	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
+	AppMetadata  map[string]interface{} `json:"app_metadata,omitempty"`
+	BanDuration  *BanDuration           `json:"ban_duration,omitempty"`
+}
+
+type AdminUpdateUserResponse struct {
+	User
+}
+
+type AdminDeleteUserRequest struct {
+	UserID uuid.UUID
 }
 
 type Provider string
@@ -189,7 +213,7 @@ type ChallengeFactorResponse struct {
 }
 
 type VerifyFactorRequest struct {
-	FactorID uuid.UUID
+	FactorID uuid.UUID `json:"-"`
 
 	ChallengeID uuid.UUID `json:"challenge_id"`
 	Code        string    `json:"code"`
@@ -272,10 +296,10 @@ type SettingsResponse struct {
 }
 
 type SignupRequest struct {
-	Email    string                 `json:"email"`
-	Phone    string                 `json:"phone"`
-	Password string                 `json:"password"`
-	Data     map[string]interface{} `json:"data"`
+	Email    string                 `json:"email,omitempty"`
+	Phone    string                 `json:"phone,omitempty"`
+	Password string                 `json:"password,omitempty"`
+	Data     map[string]interface{} `json:"data,omitempty"`
 }
 
 type SignupResponse struct {
@@ -309,12 +333,12 @@ type UserResponse struct {
 }
 
 type UpdateUserRequest struct {
-	Email    string                 `json:"email"`
-	Password *string                `json:"password"`
-	Nonce    string                 `json:"nonce"`
-	Data     map[string]interface{} `json:"data"`
+	Email    string                 `json:"email,omitempty"`
+	Password *string                `json:"password,omitempty"`
+	Nonce    string                 `json:"nonce,omitempty"`
+	Data     map[string]interface{} `json:"data,omitempty"`
 	AppData  map[string]interface{} `json:"app_metadata,omitempty"`
-	Phone    string                 `json:"phone"`
+	Phone    string                 `json:"phone,omitempty"`
 }
 
 type UpdateUserResponse struct {

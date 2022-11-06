@@ -75,7 +75,7 @@ func TestAdminGetUser(t *testing.T) {
 
 	admin := withAdmin(client)
 
-	// Create a user that we know should be returned
+	// Create a user
 	pass := "password"
 	email := randomEmail()
 	req := types.AdminCreateUserRequest{
@@ -87,7 +87,7 @@ func TestAdminGetUser(t *testing.T) {
 	require.NoError(err)
 	require.Regexp(uuidRegex, createResp.ID)
 
-	// Then get the user we just created
+	// Get that user
 	resp, err := admin.AdminGetUser(types.AdminGetUserRequest{
 		UserID: createResp.ID,
 	})
@@ -97,6 +97,82 @@ func TestAdminGetUser(t *testing.T) {
 
 	// Cannot get a user that doesn't exist
 	_, err = admin.AdminGetUser(types.AdminGetUserRequest{
+		UserID: uuid.New(),
+	})
+	assert.Error(err)
+}
+
+func TestAdminUpdateUser(t *testing.T) {
+	assert := assert.New(t)
+	require := require.New(t)
+
+	// Need admin credential
+	_, err := client.AdminUpdateUser(types.AdminUpdateUserRequest{
+		UserID: uuid.Nil,
+	})
+	assert.Error(err)
+
+	admin := withAdmin(client)
+
+	// Create a user
+	pass := "password"
+	email := randomEmail()
+	req := types.AdminCreateUserRequest{
+		Email:    email,
+		Role:     "test",
+		Password: &pass,
+	}
+	createResp, err := admin.AdminCreateUser(req)
+	require.NoError(err)
+	require.Regexp(uuidRegex, createResp.ID)
+
+	// Update the user
+	resp, err := admin.AdminUpdateUser(types.AdminUpdateUserRequest{
+		UserID: createResp.ID,
+		Role:   "admin",
+	})
+	require.NoError(err)
+	assert.Equal(resp.Email, email)
+	assert.Equal(resp.Role, "admin")
+
+	// Cannot update a user that doesn't exist
+	_, err = admin.AdminUpdateUser(types.AdminUpdateUserRequest{
+		UserID: uuid.New(),
+	})
+	assert.Error(err)
+}
+
+func TestAdminDeleteUser(t *testing.T) {
+	assert := assert.New(t)
+	require := require.New(t)
+
+	// Need admin credential
+	err := client.AdminDeleteUser(types.AdminDeleteUserRequest{
+		UserID: uuid.Nil,
+	})
+	assert.Error(err)
+
+	admin := withAdmin(client)
+
+	// Create a user
+	pass := "password"
+	email := randomEmail()
+	resp, err := admin.AdminCreateUser(types.AdminCreateUserRequest{
+		Email:    email,
+		Role:     "test",
+		Password: &pass,
+	})
+	require.NoError(err)
+	assert.NotEqual(uuid.Nil, resp.ID)
+
+	// Delete the user
+	err = admin.AdminDeleteUser(types.AdminDeleteUserRequest{
+		UserID: resp.ID,
+	})
+	assert.NoError(err)
+
+	// Cannot delete a user that doesn't exist
+	err = admin.AdminDeleteUser(types.AdminDeleteUserRequest{
 		UserID: uuid.New(),
 	})
 	assert.Error(err)
