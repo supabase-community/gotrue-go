@@ -175,6 +175,85 @@ type AdminDeleteUserFactorRequest struct {
 	FactorID uuid.UUID
 }
 
+type SAMLAttribute struct {
+	Name    string      `json:"name,omitempty"`
+	Names   []string    `json:"names,omitempty"`
+	Default interface{} `json:"default,omitempty"`
+}
+
+type SAMLAttributeMapping struct {
+	Keys map[string]SAMLAttribute `json:"keys,omitempty"`
+}
+
+type SAMLProvider struct {
+	EntityID    string  `json:"entity_id"`
+	MetadataXML string  `json:"metadata_xml,omitempty"`
+	MetadataURL *string `json:"metadata_url,omitempty"`
+
+	AttributeMapping SAMLAttributeMapping `json:"attribute_mapping,omitempty"`
+}
+
+type SSODomain struct {
+	Domain string `db:"domain" json:"domain"`
+}
+
+type SSOProvider struct {
+	ID           uuid.UUID    `json:"id"`
+	ResourceID   *string      `json:"resource_id,omitempty"`
+	SAMLProvider SAMLProvider `json:"saml,omitempty"`
+	SSODomains   []SSODomain  `json:"domains"`
+	CreatedAt    time.Time    `json:"created_at"`
+	UpdatedAt    time.Time    `json:"updated_at"`
+}
+
+type AdminListSSOProvidersResponse struct {
+	Providers []SSOProvider `json:"items"`
+}
+
+type AdminCreateSSOProviderRequest struct {
+	ResourceID       string               `json:"resource_id"`
+	Type             string               `json:"type"`
+	MetadataURL      string               `json:"metadata_url"`
+	MetadataXML      string               `json:"metadata_xml"`
+	Domains          []string             `json:"domains"`
+	AttributeMapping SAMLAttributeMapping `json:"attribute_mapping"`
+}
+
+type AdminCreateSSOProviderResponse struct {
+	SSOProvider
+}
+
+type AdminGetSSOProviderRequest struct {
+	ProviderID uuid.UUID
+}
+
+type AdminGetSSOProviderResponse struct {
+	SSOProvider
+}
+
+type AdminUpdateSSOProviderRequest struct {
+	ProviderID uuid.UUID `json:"-"`
+
+	ResourceID       string               `json:"resource_id"`
+	Type             string               `json:"type"`
+	MetadataURL      string               `json:"metadata_url"`
+	MetadataXML      string               `json:"metadata_xml"`
+	Domains          []string             `json:"domains"`
+	AttributeMapping SAMLAttributeMapping `json:"attribute_mapping"`
+}
+
+type AdminUpdateSSOProviderResponse struct {
+	SSOProvider
+}
+
+type AdminDeleteSSOProviderRequest struct {
+	ProviderID uuid.UUID
+}
+
+type AdminDeleteSSOProviderResponse struct {
+	SSOProvider
+}
+
 type Provider string
 
 const (

@@ -67,6 +67,27 @@ type Client interface {
 	// Requires admin token.
 	AdminGenerateLink(req types.AdminGenerateLinkRequest) (*types.AdminGenerateLinkResponse, error)
 
+	// GET /admin/sso/providers
+	//
+	// Get a list of all SAML SSO Identity Providers in the system.
+	AdminListSSOProviders() (*types.AdminListSSOProvidersResponse, error)
+	// POST /admin/sso/providers
+	//
+	// Create a new SAML SSO Identity Provider.
+	AdminCreateSSOProvider(req types.AdminCreateSSOProviderRequest) (*types.AdminCreateSSOProviderResponse, error)
+	// GET /admin/sso/providers/{idp_id}
+	//
+	// Get a SAML SSO Identity Provider by ID.
+	AdminGetSSOProvider(req types.AdminGetSSOProviderRequest) (*types.AdminGetSSOProviderResponse, error)
+	// PUT /admin/sso/providers/{idp_id}
+	//
+	// Update a SAML SSO Identity Provider by ID.
+	AdminUpdateSSOProvider(req types.AdminUpdateSSOProviderRequest) (*types.AdminUpdateSSOProviderResponse, error)
+	// DELETE /admin/sso/providers/{idp_id}
+	//
+	// Delete a SAML SSO Identity Provider by ID.
+	AdminDeleteSSOProvider(req types.AdminDeleteSSOProviderRequest) (*types.AdminDeleteSSOProviderResponse, error)
+
 	// POST /admin/users
 	//
 	// Creates the user based on the user_id specified.

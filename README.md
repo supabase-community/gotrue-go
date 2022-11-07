@@ -20,53 +20,7 @@ This library is a pre-release work in progress. It has not been thoroughly teste
 
 The endpoints for SSO SAML are not tested and `POST /sso/saml/acs` does not provide request and response types. If you need additional support for SSO SAML, please create an issue or a pull request.
 
-Required for V1 release:
-- Implement and test endpoints
-    - Client API
-        - [X] GET /health
-        - [X] GET /settings
-        - [X] GET /callback
-        - [X] POST /callback
-        - [X] GET /authorize
-        - [X] POST /invite
-        - [X] POST /signup
-        - [X] POST /recover
-        - [X] POST /magiclink
-        - [X] POST /otp
-        - [X] POST /token
-        - [X] GET /verify
-        - [X] POST /verify
-        - [X] POST /logout
-        - [X] GET /reauthenticate
-        - [X] GET /user
-        - [X] PUT /user
-        - [X] POST /factors
-        - [X] POST /factors/{factor_id}/verify
-        - [X] POST /factors/{factor_id}/challenge
-        - [X] DELETE /factors/{factor_id}
-        - [X] GET /sso/saml/metadata (not tested)
-        - [X] POST /sso/saml/acs (not tested)
-    - Admin API
-        - [X] GET /admin/audit
-        - [X] GET /admin/users
-        - [X] POST /admin/users
-        - [X] GET /admin/users/{user_id}/factors
-        - [X] DELETE /admin/users/{user_id}/factors/{factor_id}
-        - [X] PUT /admin/users/{user_id}/factors/{factor_id}
-        - [X] GET /admin/users/{user_id}
-        - [X] PUT /admin/users/{user_id}
-        - [X] DELETE /admin/users/{user_id}
-        - [X] POST /admin/generate_link
-        - [ ] GET /admin/sso/providers
-        - [ ] POST /admin/sso/providers
-        - [ ] GET /admin/sso/providers/{idp_id}
-        - [ ] PUT /admin/sso/providers/{idp_id}
-        - [ ] DELETE /admin/sso/providers/{idp_id}
-- Test infrastructure
-    - [X] Postgres container with GoTrue config
-    - [X] GoTrue container - signup enabled, autoconfirm off
-    - [X] GoTrue container - signup enabled, autoconfirm on
-    - [X] GoTrue container - signup disabled
+Still required for V1 release:
 - [ ] Support for Captcha tokens
 
 ## Quick start
