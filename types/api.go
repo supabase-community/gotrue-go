@@ -353,6 +353,9 @@ type InviteResponse struct {
 // DEPRECATED: Use /otp with Email and CreateUser=true instead of /magiclink.
 type MagiclinkRequest struct {
 	Email string `json:"email"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type OTPRequest struct {
@@ -360,10 +363,16 @@ type OTPRequest struct {
 	Phone      string                 `json:"phone"`
 	CreateUser bool                   `json:"create_user"`
 	Data       map[string]interface{} `json:"data"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type RecoverRequest struct {
 	Email string `json:"email"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type ExternalProviders struct {
@@ -404,6 +413,9 @@ type SignupRequest struct {
 	Phone    string                 `json:"phone,omitempty"`
 	Password string                 `json:"password,omitempty"`
 	Data     map[string]interface{} `json:"data,omitempty"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type SignupResponse struct {
@@ -412,6 +424,16 @@ type SignupResponse struct {
 
 	// Response if autoconfirm is on
 	Session
+}
+
+type SSORequest struct {
+	// Use either ProviderID or Domain.
+	ProviderID uuid.UUID `json:"provider_id"`
+	Domain     string    `json:"domain"`
+	RedirectTo string    `json:"redirect_to"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type TokenRequest struct {
@@ -426,6 +448,9 @@ type TokenRequest struct {
 	// RefreshToken is required if GrantType is 'refresh_token'.
 	// It must not be provided if GrantType is 'password'.
 	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// Provide Captcha token if enabled. Not required if GrantType is 'refresh_token'.
+	SecurityEmbed
 }
 
 type TokenResponse struct {
@@ -489,6 +514,9 @@ type VerifyForUserRequest struct {
 	RedirectTo string           `json:"redirect_to"`
 	Email      string           `json:"email"`
 	Phone      string           `json:"phone"`
+
+	// Provide Captcha token if enabled.
+	SecurityEmbed
 }
 
 type VerifyForUserResponse struct {

@@ -278,4 +278,52 @@ type Client interface {
 	// which is used to verify the token associated to the user. It also returns a
 	// JSON response rather than a redirect.
 	VerifyForUser(req types.VerifyForUserRequest) (*types.VerifyForUserResponse, error)
+
+	// GET /sso/saml/metadata
+	//
+	// Get the SAML metadata for the configured SAML provider.
+	//
+	// If successful, the server returns an XML response. Making sense of this is
+	// outside the scope of this client, so it is simply returned as []byte.
+	SAMLMetadata() ([]byte, error)
+	// POST /sso/saml/acs
+	//
+	// Implements the main Assertion Consumer Service endpoint behavior.
+	//
+	// This client does not provide a typed endpoint for SAML ACS. This method is
+	// provided for convenience and will simply POST your HTTP request to the
+	// endpoint and return the response.
+	//
+	// For required parameters, see the SAML spec or the GoTrue implementation
+	// of this endpoint.
+	//
+	// The server may issue redirects. Using the default HTTP client, this method
+	// will follow those redirects and return the final HTTP response. Should you
+	// prefer the client not to follow redirects, you can provide a custom HTTP
+	// client using WithClient(). See the example below.
+	//
+	// Example:
+	//	c := http.Client{
+	//		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+	//			return http.ErrUseLastResponse
+	//		},
+	//	}
+	SAMLACS(req *http.Request) (*http.Response, error)
+
+	// POST /sso
+	//
+	// Initiate an SSO session with the given provider.
+	//
+	// If successful, the server returns a redirect to the provider's authorization
+	// URL. The client will follow it and return the final response. Should you
+	// prefer the client not to follow redirects, you can provide a custom HTTP
+	// client using WithClient(). See the example below.
+	//
+	// Example:
+	//	c := http.Client{
+	//		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+	//			return http.ErrUseLastResponse
+	//		},
+	//	}
+	SSO(req types.SSORequest) (*http.Response, error)
 }

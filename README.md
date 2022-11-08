@@ -20,9 +20,6 @@ This library is a pre-release work in progress. It has not been thoroughly teste
 
 The endpoints for SSO SAML are not tested and `POST /sso/saml/acs` does not provide request and response types. If you need additional support for SSO SAML, please create an issue or a pull request.
 
-Still required for V1 release:
-- [ ] Support for Captcha tokens
-
 ## Quick start
 
 ### Install
