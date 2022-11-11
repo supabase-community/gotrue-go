@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/google/uuid"
@@ -428,12 +429,21 @@ type SignupResponse struct {
 
 type SSORequest struct {
 	// Use either ProviderID or Domain.
-	ProviderID uuid.UUID `json:"provider_id"`
-	Domain     string    `json:"domain"`
-	RedirectTo string    `json:"redirect_to"`
+	ProviderID       uuid.UUID `json:"provider_id"`
+	Domain           string    `json:"domain"`
+	RedirectTo       string    `json:"redirect_to"`
+	SkipHTTPRedirect bool      `json:"skip_http_redirect"`
 
 	// Provide Captcha token if enabled.
 	SecurityEmbed
+}
+
+type SSOResponse struct {
+	// Returned only if SkipHTTPRedirect was set in request.
+	URL string `json:"url"`
+
+	// Returned otherwise.
+	HTTPResponse *http.Response `json:"-"`
 }
 
 type TokenRequest struct {
@@ -516,6 +526,7 @@ type VerifyForUserRequest struct {
 	Phone      string           `json:"phone"`
 
 	// Provide Captcha token if enabled.
+	// Not required for server version >= v2.30.1
 	SecurityEmbed
 }
 

@@ -315,15 +315,10 @@ type Client interface {
 	// Initiate an SSO session with the given provider.
 	//
 	// If successful, the server returns a redirect to the provider's authorization
-	// URL. The client will follow it and return the final response. Should you
-	// prefer the client not to follow redirects, you can provide a custom HTTP
-	// client using WithClient(). See the example below.
+	// URL. The client will follow it and return the final HTTP response.
 	//
-	// Example:
-	//	c := http.Client{
-	//		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-	//			return http.ErrUseLastResponse
-	//		},
-	//	}
-	SSO(req types.SSORequest) (*http.Response, error)
+	// GoTrue allows you to skip following the redirect by setting SkipHTTPRedirect
+	// on the request struct. In this case, the URL to redirect to will be returned
+	// in the response.
+	SSO(req types.SSORequest) (*types.SSOResponse, error)
 }
