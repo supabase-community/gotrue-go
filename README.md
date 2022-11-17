@@ -1,9 +1,9 @@
 # gotrue-go
 
-![example branch parameter](https://github.com/kwoodhouse93/gotrue-go/actions/workflows/test.yaml/badge.svg?branch=main)
-[![codecov](https://codecov.io/gh/kwoodhouse93/gotrue-go/branch/main/graph/badge.svg?token=JQQJKETMRX)](https://codecov.io/gh/kwoodhouse93/gotrue-go)
-![GitHub](https://img.shields.io/github/license/kwoodhouse93/gotrue-go)
-[![Go Reference](https://pkg.go.dev/badge/github.com/kwoodhouse93/gotrue-go.svg)](https://pkg.go.dev/github.com/kwoodhouse93/gotrue-go)
+![example branch parameter](https://github.com/supabase-community/gotrue-go/actions/workflows/test.yaml/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/supabase-community/gotrue-go/branch/main/graph/badge.svg?token=JQQJKETMRX)](https://codecov.io/gh/supabase-community/gotrue-go)
+![GitHub](https://img.shields.io/github/license/supabase-community/gotrue-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/supabase-community/gotrue-go.svg)](https://pkg.go.dev/github.com/supabase-community/gotrue-go)
 
 
 A Golang client library for the [Supabase GoTrue](https://github.com/supabase/gotrue) API.
@@ -25,14 +25,14 @@ The endpoints for SSO SAML are not tested and `POST /sso/saml/acs` does not prov
 ### Install
 
 ```sh
-go get github.com/kwoodhouse93/gotrue-go
+go get github.com/supabase-community/gotrue-go
 ```
 
 ### Usage
 ```go
 package main
 
-import "github.com/kwoodhouse93/gotrue-go"
+import "github.com/supabase-community/gotrue-go"
 
 const (
     projectReference = "<your_supabase_project_reference>"

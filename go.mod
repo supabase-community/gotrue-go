@@ -1,4 +1,4 @@
-module github.com/kwoodhouse93/gotrue-go
+module github.com/supabase-community/gotrue-go
 
 go 1.18
 

@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/kwoodhouse93/gotrue-go/types"
+	"github.com/supabase-community/gotrue-go/types"
 )
 
 const factorsPath = "/factors"

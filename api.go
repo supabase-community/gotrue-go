@@ -3,7 +3,7 @@ package gotrue
 import (
 	"net/http"
 
-	"github.com/kwoodhouse93/gotrue-go/types"
+	"github.com/supabase-community/gotrue-go/types"
 )
 
 // Create a new client using gotrue.New, then you can call the methods below.

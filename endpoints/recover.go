@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/kwoodhouse93/gotrue-go/types"
+	"github.com/supabase-community/gotrue-go/types"
 )
 
 const recoverPath = "/recover"

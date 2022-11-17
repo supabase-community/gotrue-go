@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/kwoodhouse93/gotrue-go/types"
+	"github.com/supabase-community/gotrue-go/types"
 )
 
 func TestMagiclink(t *testing.T) {
