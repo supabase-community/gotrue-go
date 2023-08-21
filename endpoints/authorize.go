@@ -1,14 +1,34 @@
 package endpoints
 
 import (
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/supabase-community/gotrue-go/types"
 )
 
 const authorizePath = "/authorize"
+
+func generatePKCEParams() (*types.PKCEParams, error) {
+	data := make([]byte, 32)
+	if _, err := io.ReadFull(rand.Reader, data); err != nil {
+		return nil, err
+	}
+
+	// RawURLEncoding since "code challenge can only contain alphanumeric characters, hyphens, periods, underscores and tildes"
+	verifier := base64.RawURLEncoding.EncodeToString(data)
+	sha := sha256.Sum256([]byte(verifier))
+	challenge := base64.RawURLEncoding.EncodeToString(sha[:])
+	return &types.PKCEParams{
+		Challenge:       challenge,
+		ChallengeMethod: "S256",
+		Verifier:        verifier,
+	}, nil
+}
 
 // GET /authorize
 //
@@ -27,8 +47,21 @@ func (c *Client) Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse
 	}
 
 	q := r.URL.Query()
-	q.Add("provider", string(req.Provider))
 	q.Add("scopes", req.Scopes)
+	q.Add("provider", string(req.Provider))
+
+	verifier := ""
+
+	if string(req.FlowType) == string(types.FlowPKCE) {
+		pkce, err := generatePKCEParams()
+		if err != nil {
+			return nil, err
+		}
+		q.Add("code_challenge", pkce.Challenge)
+		q.Add("code_challenge_method", pkce.ChallengeMethod)
+		verifier = pkce.Verifier
+	}
+
 	r.URL.RawQuery = q.Encode()
 
 	// Set up a client that will not follow the redirect.
@@ -41,7 +74,7 @@ func (c *Client) Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusFound {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -54,5 +87,6 @@ func (c *Client) Authorize(req types.AuthorizeRequest) (*types.AuthorizeResponse
 	}
 	return &types.AuthorizeResponse{
 		AuthorizationURL: url,
+		Verifier:         verifier,
 	}, nil
 }

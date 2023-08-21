@@ -46,8 +46,8 @@ func (c *Client) RefreshToken(refreshToken string) (*types.TokenResponse, error)
 
 // POST /token
 //
-// This is an OAuth2 endpoint that currently implements the password and
-// refresh_token grant types
+// This is an OAuth2 endpoint that currently implements the password,
+// refresh_token, and PKCE grant types
 func (c *Client) Token(req types.TokenRequest) (*types.TokenResponse, error) {
 	switch req.GrantType {
 	case "password":
@@ -56,6 +56,10 @@ func (c *Client) Token(req types.TokenRequest) (*types.TokenResponse, error) {
 		}
 	case "refresh_token":
 		if req.RefreshToken == "" || req.Email != "" || req.Phone != "" || req.Password != "" {
+			return nil, types.ErrInvalidTokenRequest
+		}
+	case "pkce":
+		if req.Code == "" || req.CodeVerifier == "" {
 			return nil, types.ErrInvalidTokenRequest
 		}
 	default:
