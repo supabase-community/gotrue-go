@@ -27,11 +27,10 @@ func TestAuthorize(t *testing.T) {
 	assert.Contains(resp.AuthorizationURL, "github.com/login/oauth/authorize")
 
 	// Test login with PKCE
-	request := types.AuthorizeRequest{
-		Provider: "google",
+	resp, err = autoconfirmClient.Authorize(types.AuthorizeRequest{
+		Provider: "github",
 		FlowType: "pkce",
-	}
-	resp, err = client.Authorize(request)
+	})
 	require.NoError(err)
 	require.NotEmpty(resp.AuthorizationURL)
 	require.NotEmpty(resp.Verifier)
