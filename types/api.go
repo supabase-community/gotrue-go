@@ -256,6 +256,7 @@ type AdminDeleteSSOProviderResponse struct {
 }
 
 type Provider string
+type FlowType string
 
 const (
 	ProviderApple     Provider = "apple"
@@ -277,13 +278,27 @@ const (
 	ProviderZoom      Provider = "zoom"
 )
 
+const (
+	FlowImplicit FlowType = "implicit"
+	FlowPKCE     FlowType = "pkce"
+)
+
 type AuthorizeRequest struct {
 	Provider Provider
+	FlowType FlowType
 	Scopes   string
 }
 
 type AuthorizeResponse struct {
 	AuthorizationURL string
+	Verifier         string
+}
+
+// adapted from https://go-review.googlesource.com/c/oauth2/+/463979/9/pkce.go#64
+type PKCEParams struct {
+	Challenge       string
+	ChallengeMethod string
+	Verifier        string
 }
 
 type FactorType string
@@ -458,6 +473,12 @@ type TokenRequest struct {
 	// RefreshToken is required if GrantType is 'refresh_token'.
 	// It must not be provided if GrantType is 'password'.
 	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// Code and CodeVerifier are required if GrantType is 'pkce'.
+	Code string `json:"code,omitempty"`
+
+	// Code and CodeVerifier are required if GrantType is 'pkce'.
+	CodeVerifier string `json:"code_verifier,omitempty"`
 
 	// Provide Captcha token if enabled. Not required if GrantType is 'refresh_token'.
 	SecurityEmbed
