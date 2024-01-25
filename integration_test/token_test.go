@@ -36,6 +36,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Signin with email convenience method
 	token, err = client.SignInWithEmailPassword(email, password)
@@ -45,6 +46,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Test login with phone
 	phone := randomPhoneNumber()
@@ -67,6 +69,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Signin with phone convenience method
 	token, err = client.SignInWithPhonePassword(phone, password)
@@ -76,6 +79,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Incorrect password
 	_, err = client.Token(types.TokenRequest{
@@ -104,6 +108,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Refresh token convenience method
 	token, err = client.RefreshToken(token.RefreshToken)
@@ -113,6 +118,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.NotEmpty(token.ExpiresAt)
 
 	// Invalid input tests
 	tests := map[string]types.TokenRequest{
