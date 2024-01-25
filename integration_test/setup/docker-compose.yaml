@@ -5,7 +5,7 @@ services:
     container_name: gotrue
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.32.0
+    image: supabase/gotrue:v2.86.0
     restart: on-failure
     ports:
       - '9999:9999'
@@ -30,7 +30,7 @@ services:
     container_name: gotrue_autoconfirm
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.32.0
+    image: supabase/gotrue:v2.86.0
     restart: on-failure
     ports:
       - '9998:9998'
@@ -62,7 +62,7 @@ services:
     container_name: gotrue_signup_disabled
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.32.0
+    image: supabase/gotrue:v2.86.0
     restart: on-failure
     ports:
       - '9997:9997'
