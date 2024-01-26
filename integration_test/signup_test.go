@@ -66,6 +66,7 @@ func TestSignup(t *testing.T) {
 	assert.NotEmpty(session.RefreshToken)
 	assert.Equal("bearer", session.TokenType)
 	assert.Equal(3600, session.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), session.ExpiresAt, float64(time.Second))
 
 	// Sign up with signups disabled
 	email = randomEmail()

@@ -2,6 +2,7 @@ package integration_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -36,6 +37,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Signin with email convenience method
 	token, err = client.SignInWithEmailPassword(email, password)
@@ -45,6 +47,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Test login with phone
 	phone := randomPhoneNumber()
@@ -67,6 +70,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Signin with phone convenience method
 	token, err = client.SignInWithPhonePassword(phone, password)
@@ -76,6 +80,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Incorrect password
 	_, err = client.Token(types.TokenRequest{
@@ -104,6 +109,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Refresh token convenience method
 	token, err = client.RefreshToken(token.RefreshToken)
@@ -113,6 +119,7 @@ func TestToken(t *testing.T) {
 	assert.NotEmpty(token.RefreshToken)
 	assert.Equal("bearer", token.TokenType)
 	assert.Equal(3600, token.ExpiresIn)
+	assert.InDelta(time.Now().Add(3600*time.Second).Unix(), token.ExpiresAt, float64(time.Second))
 
 	// Invalid input tests
 	tests := map[string]types.TokenRequest{
