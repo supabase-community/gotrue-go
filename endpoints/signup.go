@@ -16,7 +16,7 @@ const signupPath = "/signup"
 
 // POST /signup
 //
-// Register a new user with an email, password and optional redirect url after email confirmation
+// Register a new user with an email and password.
 func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
