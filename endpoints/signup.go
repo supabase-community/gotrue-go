@@ -16,7 +16,7 @@ const signupPath = "/signup"
 
 // POST /signup
 //
-// Register a new user with an email and password.
+// Register a new user with an email, password and optional redirect url after email confirmation
 func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
@@ -26,6 +26,15 @@ func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) 
 	r, err := c.newRequest(signupPath, http.MethodPost, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
+	}
+
+	if req.ConfirmationRedirectUrl != "" {
+		q := r.URL.Query()
+		q.Add("redirect_to", req.ConfirmationRedirectUrl)
+		r.URL.RawQuery = q.Encode()
+
+		// Set up a client that will not follow the redirect.
+		c.client = noRedirClient(c.client)
 	}
 
 	resp, err := c.client.Do(r)
