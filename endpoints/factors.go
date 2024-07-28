@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
@@ -40,7 +40,7 @@ func (c *Client) EnrollFactor(req types.EnrollFactorRequest) (*types.EnrollFacto
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -71,7 +71,7 @@ func (c *Client) ChallengeFactor(req types.ChallengeFactorRequest) (*types.Chall
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -116,7 +116,7 @@ func (c *Client) VerifyFactor(req types.VerifyFactorRequest) (*types.VerifyFacto
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -148,7 +148,7 @@ func (c *Client) UnenrollFactor(req types.UnenrollFactorRequest) (*types.Unenrol
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}

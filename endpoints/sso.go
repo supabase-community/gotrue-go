@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/supabase-community/gotrue-go/types"
@@ -48,7 +48,7 @@ func (c *Client) SSO(req types.SSORequest) (*types.SSOResponse, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusSeeOther {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
