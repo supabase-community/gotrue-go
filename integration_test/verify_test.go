@@ -28,8 +28,8 @@ func TestVerify(t *testing.T) {
 	})
 	require.NoError(err)
 	assert.NotEmpty(vResp.URL)
-	assert.Equal("401", vResp.ErrorCode)
-	assert.Equal("unauthorized_client", vResp.Error)
+	assert.Equal("403", vResp.ErrorCode)
+	assert.Equal("access_denied", vResp.Error)
 
 	// Test Verify, invalid request
 	_, err = client.Verify(types.VerifyRequest{})

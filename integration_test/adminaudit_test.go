@@ -9,10 +9,12 @@ import (
 	"github.com/supabase-community/gotrue-go/types"
 )
 
-// This test relies on running with an empty audit log.
-// This appears to be fine with the default test settings, but if it becomes an
-// issue locally or in CI, we can add a cleanup step to all tests, or rewrite
-// to stop looking at specific numbers of log entries.
+// This test creates some audit logs, then retrieves them with pagination.
+// However, other tests running in parallel may also create logs, so we only
+// check that _at least_ the logs we create here are returned.
+//
+// In order to test this functionality exactly, we need to run this test against
+// a fresh database with an empty audit log table.
 func TestAdminAudit(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
@@ -45,9 +47,9 @@ func TestAdminAudit(t *testing.T) {
 	})
 	require.NoError(err)
 	assert.Len(resp.Logs, 4)
-	assert.EqualValues(10, resp.TotalCount)
+	assert.GreaterOrEqual(resp.TotalCount, 10)
 	assert.EqualValues(2, resp.NextPage)
-	assert.EqualValues(3, resp.TotalPages)
+	assert.GreaterOrEqual(resp.TotalPages, uint(3))
 
 	resp, err = client.AdminAudit(types.AdminAuditRequest{
 		Page:    2,
@@ -55,19 +57,18 @@ func TestAdminAudit(t *testing.T) {
 	})
 	require.NoError(err)
 	assert.Len(resp.Logs, 4)
-	assert.EqualValues(10, resp.TotalCount)
+	assert.GreaterOrEqual(resp.TotalCount, 10)
 	assert.EqualValues(3, resp.NextPage)
-	assert.EqualValues(3, resp.TotalPages)
+	assert.GreaterOrEqual(resp.TotalPages, uint(3))
 
 	resp, err = client.AdminAudit(types.AdminAuditRequest{
 		Page:    3,
 		PerPage: 4,
 	})
 	require.NoError(err)
-	assert.Len(resp.Logs, 2)
-	assert.EqualValues(10, resp.TotalCount)
-	assert.EqualValues(0, resp.NextPage)
-	assert.EqualValues(3, resp.TotalPages)
+	assert.GreaterOrEqual(len(resp.Logs), 2)
+	assert.GreaterOrEqual(resp.TotalCount, 10)
+	assert.GreaterOrEqual(resp.TotalPages, uint(3))
 
 	// Invalid - empty query
 	_, err = client.AdminAudit(types.AdminAuditRequest{
@@ -100,7 +101,7 @@ func TestAdminAudit(t *testing.T) {
 		},
 	})
 	require.NoError(err)
-	assert.Len(resp.Logs, 10)
+	assert.GreaterOrEqual(len(resp.Logs), 10)
 
 	resp, err = client.AdminAudit(types.AdminAuditRequest{
 		Query: &types.AuditQuery{

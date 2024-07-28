@@ -48,7 +48,7 @@ func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) 
 	}
 
 	// To make the response easier to consume, if autoconfirm was enabled, the
-	// session user should be popuated. Copy that into the embedded user type
+	// session user should be populated. Copy that into the embedded user type
 	// so it's easier to access.
 	//
 	// i.e. we can access user fields like res.Email regardless of whether
