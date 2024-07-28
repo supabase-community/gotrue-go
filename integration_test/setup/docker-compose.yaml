@@ -5,10 +5,10 @@ services:
     container_name: gotrue
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.86.0
+    image: supabase/gotrue:v2.157.0
     restart: on-failure
     ports:
-      - '9999:9999'
+      - "9999:9999"
     environment:
       GOTRUE_JWT_SECRET: "secret"
       GOTRUE_DB_DRIVER: "postgres"
@@ -30,10 +30,10 @@ services:
     container_name: gotrue_autoconfirm
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.86.0
+    image: supabase/gotrue:v2.157.0
     restart: on-failure
     ports:
-      - '9998:9998'
+      - "9998:9998"
     environment:
       GOTRUE_JWT_SECRET: "secret"
       GOTRUE_DB_DRIVER: "postgres"
@@ -62,10 +62,10 @@ services:
     container_name: gotrue_signup_disabled
     depends_on:
       - postgres
-    image: supabase/gotrue:v2.86.0
+    image: supabase/gotrue:v2.157.0
     restart: on-failure
     ports:
-      - '9997:9997'
+      - "9997:9997"
     environment:
       GOTRUE_JWT_SECRET: "secret"
       GOTRUE_DB_DRIVER: "postgres"
@@ -90,7 +90,7 @@ services:
       dockerfile: Dockerfile.postgres.dev
     container_name: gotrue_postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root

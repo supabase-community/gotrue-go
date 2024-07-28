@@ -30,7 +30,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	require.NoError(err)
 
 	assert.EqualValues(resp.VerificationType, "signup")
-	linkRegexp := regexp.MustCompile(`^http://localhost:9999/\?token=[a-zA-Z0-9_-]+&type=signup&redirect_to=http://localhost:3000$`)
+	linkRegexp := regexp.MustCompile(`^http://localhost:9999/verify\?token=[a-zA-Z0-9_-]+&type=signup&redirect_to=http://localhost:3000$`)
 	assert.Regexp(linkRegexp, resp.ActionLink)
 	assert.NotEmpty(resp.HashedToken)
 	assert.NotEmpty(resp.EmailOTP)
@@ -148,7 +148,7 @@ func TestAdminGenerateLink(t *testing.T) {
 	require.NoError(err)
 	assert.Equal("http://localhost:3000", resp.RedirectTo)
 	assert.EqualValues(resp.VerificationType, "email_change_current")
-	linkRegexp = regexp.MustCompile(`^http://localhost:9999/\?token=[a-zA-Z0-9_-]+&type=email_change&redirect_to=http://localhost:3000$`)
+	linkRegexp = regexp.MustCompile(`^http://localhost:9999/verify\?token=[a-zA-Z0-9_-]+&type=email_change&redirect_to=http://localhost:3000$`)
 	assert.Regexp(linkRegexp, resp.ActionLink)
 	assert.NotEmpty(resp.HashedToken)
 	assert.NotEmpty(resp.EmailOTP)
