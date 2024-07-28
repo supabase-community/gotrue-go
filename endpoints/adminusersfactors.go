@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/supabase-community/gotrue-go/types"
@@ -28,7 +28,7 @@ func (c *Client) AdminListUserFactors(req types.AdminListUserFactorsRequest) (*t
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -73,7 +73,7 @@ func (c *Client) AdminUpdateUserFactor(req types.AdminUpdateUserFactorRequest) (
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -107,7 +107,7 @@ func (c *Client) AdminDeleteUserFactor(req types.AdminDeleteUserFactorRequest) e
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("response status code %d", resp.StatusCode)
 		}

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -59,7 +59,7 @@ func (c *Client) Verify(req types.VerifyRequest) (*types.VerifyResponse, error) 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusSeeOther {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
@@ -140,7 +140,7 @@ func (c *Client) VerifyForUser(req types.VerifyForUserRequest) (*types.VerifyFor
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusSeeOther {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}

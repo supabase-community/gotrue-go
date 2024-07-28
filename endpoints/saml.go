@@ -2,7 +2,7 @@ package endpoints
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -29,14 +29,14 @@ func (c *Client) SAMLMetadata() ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fullBody, err := ioutil.ReadAll(resp.Body)
+		fullBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response status code %d", resp.StatusCode)
 		}
 		return nil, fmt.Errorf("response status code %d: %s", resp.StatusCode, fullBody)
 	}
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 // POST /sso/saml/acs
@@ -56,6 +56,7 @@ func (c *Client) SAMLMetadata() ([]byte, error) {
 // client using WithClient(). See the example below.
 //
 // Example:
+//
 //	c := http.Client{
 //		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 //			return http.ErrUseLastResponse
