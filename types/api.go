@@ -425,11 +425,11 @@ type SettingsResponse struct {
 }
 
 type SignupRequest struct {
-	Email    string                 `json:"email,omitempty"`
-	Phone    string                 `json:"phone,omitempty"`
-	Password string                 `json:"password,omitempty"`
-	Data     map[string]interface{} `json:"data,omitempty"`
-
+	Email                   string                 `json:"email,omitempty"`
+	Phone                   string                 `json:"phone,omitempty"`
+	Password                string                 `json:"password,omitempty"`
+	Data                    map[string]interface{} `json:"data,omitempty"`
+	ConfirmationRedirectUrl string                 `json:"-"`
 	// Provide Captcha token if enabled.
 	SecurityEmbed
 }

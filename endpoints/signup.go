@@ -28,6 +28,15 @@ func (c *Client) Signup(req types.SignupRequest) (*types.SignupResponse, error) 
 		return nil, err
 	}
 
+	if req.ConfirmationRedirectUrl != "" {
+		q := r.URL.Query()
+		q.Add("redirect_to", req.ConfirmationRedirectUrl)
+		r.URL.RawQuery = q.Encode()
+
+		// Set up a client that will not follow the redirect.
+		c.client = noRedirClient(c.client)
+	}
+
 	resp, err := c.client.Do(r)
 	if err != nil {
 		return nil, err
